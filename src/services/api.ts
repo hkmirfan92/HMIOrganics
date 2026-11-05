@@ -1,5 +1,6 @@
 import {
   Product,
+  Category,
   BrandSettings,
   SitePagesContent,
   SiteSeoSettings,
@@ -19,6 +20,7 @@ import {
 } from '../data/seoContent';
 
 const LOCAL_STORAGE_PRODUCTS_KEY = 'hmi_organics_products';
+const LOCAL_STORAGE_CATEGORIES_KEY = 'hmi_organics_categories';
 const LOCAL_STORAGE_SETTINGS_KEY = 'hmi_organics_settings';
 const LOCAL_STORAGE_PAGES_KEY = 'hmi_organics_pages';
 const LOCAL_STORAGE_SEO_KEY = 'hmi_organics_seo';
@@ -60,6 +62,108 @@ export const api = {
     } catch {}
 
     return ALL_PRODUCTS;
+  },
+
+  // Public GET: Fetch all categories
+  async getCategories(): Promise<Category[]> {
+    const defaultCategories: Category[] = [
+      {
+        id: 'personal-care',
+        name: 'Personal Care',
+        description: 'Pure herbal hair growth oils, tooth powder, botanical soaps & gentle care.',
+        icon: '🌿',
+        displayOrder: 1,
+      },
+      {
+        id: 'home-care',
+        name: 'Home & Car Care',
+        description: 'Bio-enzymatic kitchen cleaners, streak-free glass sprays & eco car washes.',
+        icon: '✨',
+        displayOrder: 2,
+      },
+    ];
+
+    try {
+      const res = await fetch('/api/categories');
+      if (res.ok) {
+        const data = await res.json();
+        if (data.success && Array.isArray(data.categories)) {
+          localStorage.setItem(LOCAL_STORAGE_CATEGORIES_KEY, JSON.stringify(data.categories));
+          return data.categories;
+        }
+      }
+    } catch (e) {
+      console.warn('API error fetching categories, using cached store:', e);
+    }
+
+    try {
+      const stored = localStorage.getItem(LOCAL_STORAGE_CATEGORIES_KEY);
+      if (stored) return JSON.parse(stored);
+    } catch {}
+
+    return defaultCategories;
+  },
+
+  // PROTECTED: Create category
+  async createCategory(categoryData: Partial<Category>): Promise<Category> {
+    const res = await fetch('/api/categories', {
+      method: 'POST',
+      headers: getAuthHeader(),
+      body: JSON.stringify(categoryData),
+    });
+
+    if (res.status === 401) {
+      this.logout();
+      throw new Error('Access Denied: You must be logged in as an administrator to create categories.');
+    }
+
+    const data = await res.json();
+    if (!res.ok || !data.success) {
+      throw new Error(data.message || 'Failed to create category');
+    }
+
+    return data.category;
+  },
+
+  // PROTECTED: Update category
+  async updateCategory(id: string, updates: Partial<Category>): Promise<Category> {
+    const res = await fetch(`/api/categories/${id}`, {
+      method: 'PUT',
+      headers: getAuthHeader(),
+      body: JSON.stringify(updates),
+    });
+
+    if (res.status === 401) {
+      this.logout();
+      throw new Error('Access Denied: You must be logged in as an administrator to update categories.');
+    }
+
+    const data = await res.json();
+    if (!res.ok || !data.success) {
+      throw new Error(data.message || 'Failed to update category');
+    }
+
+    return data.category;
+  },
+
+  // PROTECTED: Delete category
+  async deleteCategory(id: string): Promise<boolean> {
+    const res = await fetch(`/api/categories/${id}`, {
+      method: 'DELETE',
+      headers: getAuthHeader(),
+    });
+
+    if (res.status === 401) {
+      this.logout();
+      throw new Error('Access Denied: You must be logged in as an administrator to delete categories.');
+    }
+
+    const data = await res.json();
+    if (!res.ok || !data.success) {
+      throw new Error(data.message || 'Failed to delete category');
+    }
+
+    return true;
   },
 
   // Public GET: Fetch brand settings (Read-only public info)

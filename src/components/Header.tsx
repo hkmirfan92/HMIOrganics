@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { PageId, BrandSettings } from '../types';
+import { PageId, BrandSettings, Category } from '../types';
 import { BrandLogo } from './BrandLogo';
 import { BRAND_INFO } from '../data/products';
 import { MessageCircle, Menu, X, ShoppingBag } from 'lucide-react';
@@ -11,6 +11,8 @@ interface HeaderProps {
   onOpenCart: () => void;
   settings?: BrandSettings;
   isAdminAuthenticated?: boolean;
+  categories?: Category[];
+  onSelectCategoryFilter?: (catId: string) => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -20,6 +22,8 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenCart,
   settings,
   isAdminAuthenticated = false,
+  categories = [],
+  onSelectCategoryFilter,
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -34,13 +38,32 @@ export const Header: React.FC<HeaderProps> = ({
     {
       id: 'admin',
       label: isAdminAuthenticated ? '⚙ Admin Panel' : '⚙ Admin Login',
-      isAdmin: true
+      isAdmin: true,
     },
   ];
 
-  const handleLinkClick = (pageId: PageId) => {
-    onNavigate(pageId);
+  const handleLinkClick = (pageId: PageId | string) => {
     setMobileMenuOpen(false);
+
+    if (pageId === 'home') {
+      if (onSelectCategoryFilter) onSelectCategoryFilter('all');
+      onNavigate('home');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+
+    if (pageId === 'personal-care' || pageId === 'home-care') {
+      // Direct category filtering on Main page without kicking user to separate page
+      if (onSelectCategoryFilter) onSelectCategoryFilter(pageId);
+      onNavigate('home');
+      setTimeout(() => {
+        const el = document.getElementById('products-catalog');
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 100);
+      return;
+    }
+
+    onNavigate(pageId as PageId);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 

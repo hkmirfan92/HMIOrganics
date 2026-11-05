@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Product, ProductCategory, BrandSettings, PageId, SitePagesContent, AdminRole, SiteSeoSettings } from '../types';
+import { Product, ProductCategory, BrandSettings, PageId, SitePagesContent, AdminRole, SiteSeoSettings, Category } from '../types';
 import { ProductFormModal } from '../components/admin/ProductFormModal';
 import { SettingsModal } from '../components/admin/SettingsModal';
 import { ChangePasswordModal } from '../components/admin/ChangePasswordModal';
@@ -8,6 +8,7 @@ import { SeoManagementTab } from '../components/admin/SeoManagementTab';
 import { AnalyticsDashboardTab } from '../components/admin/AnalyticsDashboardTab';
 import { SubadminManagementTab } from '../components/admin/SubadminManagementTab';
 import { BrandingManagementTab } from '../components/admin/BrandingManagementTab';
+import { CategoryManagementTab } from '../components/admin/CategoryManagementTab';
 import { api } from '../services/api';
 import {
   Plus,
@@ -46,6 +47,7 @@ import {
 
 interface AdminPageProps {
   products: Product[];
+  categories?: Category[];
   settings: BrandSettings;
   pagesContent: SitePagesContent;
   seoSettings?: SiteSeoSettings;
@@ -53,6 +55,9 @@ interface AdminPageProps {
   onUpdateProduct: (id: string, updates: Partial<Product>) => Promise<void>;
   onDeleteProduct: (id: string) => Promise<void>;
   onResetCatalog: () => Promise<void>;
+  onAddCategory?: (category: Partial<Category>) => Promise<void>;
+  onUpdateCategory?: (id: string, updates: Partial<Category>) => Promise<void>;
+  onDeleteCategory?: (id: string) => Promise<void>;
   onUpdateSettings: (settings: Partial<BrandSettings>) => Promise<void>;
   onUpdatePagesContent: (pages: Partial<SitePagesContent>) => Promise<void>;
   onResetPagesContent: () => Promise<void>;
@@ -61,10 +66,11 @@ interface AdminPageProps {
   onLogout: () => void;
 }
 
-type AdminMainTab = 'catalog' | 'pages' | 'branding' | 'seo' | 'analytics' | 'subadmins';
+type AdminMainTab = 'catalog' | 'categories' | 'pages' | 'branding' | 'seo' | 'analytics' | 'subadmins';
 
 export const AdminPage: React.FC<AdminPageProps> = ({
   products,
+  categories = [],
   settings,
   pagesContent,
   seoSettings,
@@ -72,6 +78,9 @@ export const AdminPage: React.FC<AdminPageProps> = ({
   onUpdateProduct,
   onDeleteProduct,
   onResetCatalog,
+  onAddCategory,
+  onUpdateCategory,
+  onDeleteCategory,
   onUpdateSettings,
   onUpdatePagesContent,
   onResetPagesContent,
@@ -88,7 +97,7 @@ export const AdminPage: React.FC<AdminPageProps> = ({
 
   // Search & Filters for Catalog Tab
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedFilter, setSelectedFilter] = useState<'all' | 'personal-care' | 'home-care' | 'bestsellers' | 'visible' | 'hidden'>('all');
+  const [selectedFilter, setSelectedFilter] = useState<string>('all');
   
   // Modals
   const [isProductModalOpen, setIsProductModalOpen] = useState(false);
@@ -120,11 +129,10 @@ export const AdminPage: React.FC<AdminPageProps> = ({
         p.keyIngredients.some((i) => i.toLowerCase().includes(searchQuery.toLowerCase()));
 
       let matchesFilter = true;
-      if (selectedFilter === 'personal-care') matchesFilter = p.category === 'personal-care';
-      if (selectedFilter === 'home-care') matchesFilter = p.category === 'home-care';
       if (selectedFilter === 'bestsellers') matchesFilter = Boolean(p.isBestseller);
-      if (selectedFilter === 'visible') matchesFilter = p.isVisible !== false;
-      if (selectedFilter === 'hidden') matchesFilter = p.isVisible === false;
+      else if (selectedFilter === 'visible') matchesFilter = p.isVisible !== false;
+      else if (selectedFilter === 'hidden') matchesFilter = p.isVisible === false;
+      else if (selectedFilter !== 'all') matchesFilter = p.category === selectedFilter;
 
       return matchesSearch && matchesFilter;
     });
@@ -338,6 +346,18 @@ export const AdminPage: React.FC<AdminPageProps> = ({
               <span>Products Catalog ({products.length})</span>
             </button>
 
+            <button
+              onClick={() => setActiveTab('categories')}
+              className={`flex items-center gap-2 px-4 py-2 text-xs font-bold rounded-xl transition-all whitespace-nowrap cursor-pointer ${
+                activeTab === 'categories'
+                  ? 'bg-white text-[#163824] shadow-sm'
+                  : 'text-white/80 hover:text-white hover:bg-white/10'
+              }`}
+            >
+              <Layers className="w-3.5 h-3.5" />
+              <span>Categories & Range ({categories.length})</span>
+            </button>
+
             {isSuperAdmin && (
               <>
                 <button
@@ -476,26 +496,48 @@ export const AdminPage: React.FC<AdminPageProps> = ({
                 >
                   All ({products.length})
                 </button>
-                <button
-                  onClick={() => setSelectedFilter('personal-care')}
-                  className={`px-3.5 py-1.5 text-xs font-semibold rounded-lg transition-all whitespace-nowrap cursor-pointer ${
-                    selectedFilter === 'personal-care'
-                      ? 'bg-white text-[#1B4D2E] shadow-2xs font-bold'
-                      : 'text-[#4A6854] hover:text-[#1B4D2E]'
-                  }`}
-                >
-                  Personal Care ({personalCareCount})
-                </button>
-                <button
-                  onClick={() => setSelectedFilter('home-care')}
-                  className={`px-3.5 py-1.5 text-xs font-semibold rounded-lg transition-all whitespace-nowrap cursor-pointer ${
-                    selectedFilter === 'home-care'
-                      ? 'bg-white text-[#1B4D2E] shadow-2xs font-bold'
-                      : 'text-[#4A6854] hover:text-[#1B4D2E]'
-                  }`}
-                >
-                  Home Care ({homeCareCount})
-                </button>
+                {categories.length > 0 ? (
+                  categories.map((cat) => {
+                    const count = products.filter((p) => p.category === cat.id).length;
+                    const isSel = selectedFilter === cat.id;
+                    return (
+                      <button
+                        key={cat.id}
+                        onClick={() => setSelectedFilter(cat.id)}
+                        className={`px-3.5 py-1.5 text-xs font-semibold rounded-lg transition-all whitespace-nowrap cursor-pointer ${
+                          isSel
+                            ? 'bg-white text-[#1B4D2E] shadow-2xs font-bold'
+                            : 'text-[#4A6854] hover:text-[#1B4D2E]'
+                        }`}
+                      >
+                        {cat.icon ? `${cat.icon} ` : ''}{cat.name} ({count})
+                      </button>
+                    );
+                  })
+                ) : (
+                  <>
+                    <button
+                      onClick={() => setSelectedFilter('personal-care')}
+                      className={`px-3.5 py-1.5 text-xs font-semibold rounded-lg transition-all whitespace-nowrap cursor-pointer ${
+                        selectedFilter === 'personal-care'
+                          ? 'bg-white text-[#1B4D2E] shadow-2xs font-bold'
+                          : 'text-[#4A6854] hover:text-[#1B4D2E]'
+                      }`}
+                    >
+                      Personal Care ({personalCareCount})
+                    </button>
+                    <button
+                      onClick={() => setSelectedFilter('home-care')}
+                      className={`px-3.5 py-1.5 text-xs font-semibold rounded-lg transition-all whitespace-nowrap cursor-pointer ${
+                        selectedFilter === 'home-care'
+                          ? 'bg-white text-[#1B4D2E] shadow-2xs font-bold'
+                          : 'text-[#4A6854] hover:text-[#1B4D2E]'
+                      }`}
+                    >
+                      Home Care ({homeCareCount})
+                    </button>
+                  </>
+                )}
                 <button
                   onClick={() => setSelectedFilter('bestsellers')}
                   className={`px-3.5 py-1.5 text-xs font-semibold rounded-lg transition-all whitespace-nowrap cursor-pointer ${
@@ -735,6 +777,22 @@ export const AdminPage: React.FC<AdminPageProps> = ({
                 </table>
               </div>
             </div>
+          </div>
+        )}
+
+        {/* TAB: CATEGORY & PAGINATION RANGE MANAGEMENT */}
+        {activeTab === 'categories' && (
+          <div className="animate-in fade-in duration-150">
+            <CategoryManagementTab
+              categories={categories}
+              products={products}
+              settings={settings}
+              onAddCategory={onAddCategory || (async () => {})}
+              onUpdateCategory={onUpdateCategory || (async () => {})}
+              onDeleteCategory={onDeleteCategory || (async () => {})}
+              onUpdateSettings={onUpdateSettings}
+              onShowToast={showToast}
+            />
           </div>
         )}
 
@@ -981,6 +1039,7 @@ export const AdminPage: React.FC<AdminPageProps> = ({
         onClose={() => setIsProductModalOpen(false)}
         onSave={handleSaveProduct}
         productToEdit={editingProduct}
+        categories={categories}
       />
 
       {/* Store Settings Modal */}

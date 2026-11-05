@@ -46,6 +46,7 @@ const PAGES_FILE = path.join(DATA_DIR, 'pages.json');
 const SEO_FILE = path.join(DATA_DIR, 'seo.json');
 const ANALYTICS_FILE = path.join(DATA_DIR, 'analytics.json');
 const AUTH_FILE = path.join(DATA_DIR, 'auth.json');
+const CATEGORIES_FILE = path.join(DATA_DIR, 'categories.json');
 
 
 
@@ -336,6 +337,42 @@ function writeSettings(settings: unknown) {
   fs.writeFileSync(SETTINGS_FILE, JSON.stringify(settings, null, 2), 'utf-8');
 }
 
+const INITIAL_CATEGORIES = [
+  {
+    id: 'personal-care',
+    name: 'Personal Care',
+    description: 'Pure herbal hair growth oils, tooth powder, botanical soaps & gentle care.',
+    icon: '🌿',
+    displayOrder: 1,
+  },
+  {
+    id: 'home-care',
+    name: 'Home & Car Care',
+    description: 'Bio-enzymatic kitchen cleaners, streak-free glass sprays & eco car washes.',
+    icon: '✨',
+    displayOrder: 2,
+  },
+];
+
+function readCategories(): any[] {
+  try {
+    if (!fs.existsSync(CATEGORIES_FILE)) {
+      fs.writeFileSync(CATEGORIES_FILE, JSON.stringify(INITIAL_CATEGORIES, null, 2), 'utf-8');
+      return INITIAL_CATEGORIES;
+    }
+    const data = fs.readFileSync(CATEGORIES_FILE, 'utf-8');
+    const parsed = JSON.parse(data);
+    return Array.isArray(parsed) ? parsed : INITIAL_CATEGORIES;
+  } catch (err) {
+    console.error('Error reading categories file, returning default:', err);
+    return INITIAL_CATEGORIES;
+  }
+}
+
+function writeCategories(categories: unknown) {
+  fs.writeFileSync(CATEGORIES_FILE, JSON.stringify(categories, null, 2), 'utf-8');
+}
+
 function readPages() {
   try {
     if (!fs.existsSync(PAGES_FILE)) {
@@ -423,6 +460,12 @@ function writeAnalytics(analytics: unknown) {
 app.get('/api/products', (req, res) => {
   const products = readProducts();
   res.json({ success: true, products });
+});
+
+// Public GET: View categories
+app.get('/api/categories', (req, res) => {
+  const categories = readCategories();
+  res.json({ success: true, categories });
 });
 
 // Public GET: Viewers can only view public brand info (never credentials)
@@ -776,7 +819,7 @@ app.post('/api/products', requireAdminAuth, (req, res) => {
     const newProduct = req.body;
 
     const name = sanitizeString(newProduct.name);
-    const category = newProduct.category === 'home-care' ? 'home-care' : 'personal-care';
+    const category = sanitizeString(newProduct.category) || 'personal-care';
 
     if (!name) {
       return res.status(400).json({ success: false, message: 'Product name is required' });
@@ -789,7 +832,7 @@ app.post('/api/products', requireAdminAuth, (req, res) => {
       id,
       name,
       category,
-      subCategory: sanitizeString(newProduct.subCategory) || (category === 'personal-care' ? 'Skin Care' : 'Kitchen Care'),
+      subCategory: sanitizeString(newProduct.subCategory) || (category === 'personal-care' ? 'Skin Care' : 'Care Products'),
       tagline: sanitizeString(newProduct.tagline),
       description: sanitizeString(newProduct.description),
       volumeOrWeight: sanitizeString(newProduct.volumeOrWeight) || 'Standard Pack',
@@ -828,7 +871,7 @@ app.put('/api/products/:id', requireAdminAuth, (req, res) => {
     const updated = {
       ...current,
       name: req.body.name !== undefined ? sanitizeString(req.body.name) : current.name,
-      category: req.body.category !== undefined ? (req.body.category === 'home-care' ? 'home-care' : 'personal-care') : current.category,
+      category: req.body.category !== undefined ? sanitizeString(req.body.category) : current.category,
       subCategory: req.body.subCategory !== undefined ? sanitizeString(req.body.subCategory) : current.subCategory,
       tagline: req.body.tagline !== undefined ? sanitizeString(req.body.tagline) : current.tagline,
       description: req.body.description !== undefined ? sanitizeString(req.body.description) : current.description,
@@ -897,17 +940,127 @@ app.put('/api/settings', requireSuperAdminAuth, (req, res) => {
       phone: req.body.phone !== undefined ? sanitizeString(req.body.phone) : current.phone,
       phoneRaw: cleanPhoneRaw || current.phoneRaw,
       email: req.body.email !== undefined ? sanitizeString(req.body.email) : current.email,
+      address: req.body.address !== undefined ? sanitizeString(req.body.address) : current.address,
       topBannerNotice: req.body.topBannerNotice !== undefined ? sanitizeString(req.body.topBannerNotice) : current.topBannerNotice,
       deliveryNotice: req.body.deliveryNotice !== undefined ? sanitizeString(req.body.deliveryNotice) : current.deliveryNotice,
       whatsAppUrl: cleanPhoneRaw ? `https://wa.me/${cleanPhoneRaw}` : current.whatsAppUrl,
       logoUrl: req.body.logoUrl !== undefined ? sanitizeString(req.body.logoUrl) : current.logoUrl,
       faviconUrl: req.body.faviconUrl !== undefined ? sanitizeString(req.body.faviconUrl) : current.faviconUrl,
+      productsPerPage: req.body.productsPerPage !== undefined ? Math.max(1, Math.min(100, Number(req.body.productsPerPage) || 6)) : (current.productsPerPage || 6),
     };
 
     writeSettings(updated);
     res.json({ success: true, settings: updated });
   } catch (err: any) {
     res.status(500).json({ success: false, message: err?.message || 'Failed to update settings' });
+  }
+});
+
+// ==========================================
+// CATEGORY CRUD ENDPOINTS (ADMIN PROTECTED)
+// ==========================================
+
+// CREATE category: PROTECTED (Admin / Super Admin)
+app.post('/api/categories', requireAdminAuth, (req, res) => {
+  try {
+    const categories = readCategories();
+    const { name, id, description, icon, displayOrder } = req.body;
+    const cleanName = sanitizeString(name);
+    if (!cleanName) {
+      return res.status(400).json({ success: false, message: 'Category name is required' });
+    }
+
+    const cleanId = (sanitizeString(id) || cleanName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, ''))
+      .toLowerCase();
+
+    if (!cleanId) {
+      return res.status(400).json({ success: false, message: 'Valid category ID could not be generated' });
+    }
+
+    if (categories.some((c: any) => c.id === cleanId)) {
+      return res.status(400).json({ success: false, message: 'Category with this ID already exists' });
+    }
+
+    const newCategory = {
+      id: cleanId,
+      name: cleanName,
+      description: sanitizeString(description) || '',
+      icon: sanitizeString(icon) || '🌿',
+      displayOrder: Number(displayOrder) || (categories.length + 1),
+    };
+
+    categories.push(newCategory);
+    writeCategories(categories);
+    res.status(201).json({ success: true, category: newCategory });
+  } catch (err: any) {
+    res.status(500).json({ success: false, message: err?.message || 'Failed to create category' });
+  }
+});
+
+// UPDATE category: PROTECTED
+app.put('/api/categories/:id', requireAdminAuth, (req, res) => {
+  try {
+    const { id } = req.params;
+    const categories = readCategories();
+    const index = categories.findIndex((c: any) => c.id === id);
+
+    if (index === -1) {
+      return res.status(404).json({ success: false, message: 'Category not found' });
+    }
+
+    const current = categories[index];
+    const updated = {
+      ...current,
+      name: req.body.name !== undefined ? sanitizeString(req.body.name) : current.name,
+      description: req.body.description !== undefined ? sanitizeString(req.body.description) : current.description,
+      icon: req.body.icon !== undefined ? sanitizeString(req.body.icon) : current.icon,
+      displayOrder: req.body.displayOrder !== undefined ? Number(req.body.displayOrder) : current.displayOrder,
+    };
+
+    categories[index] = updated;
+    writeCategories(categories);
+    res.json({ success: true, category: updated });
+  } catch (err: any) {
+    res.status(500).json({ success: false, message: err?.message || 'Failed to update category' });
+  }
+});
+
+// DELETE category: PROTECTED
+app.delete('/api/categories/:id', requireAdminAuth, (req, res) => {
+  try {
+    const { id } = req.params;
+    let categories = readCategories();
+    const exists = categories.some((c: any) => c.id === id);
+
+    if (!exists) {
+      return res.status(404).json({ success: false, message: 'Category not found' });
+    }
+
+    if (categories.length <= 1) {
+      return res.status(400).json({ success: false, message: 'At least one category must remain in store' });
+    }
+
+    categories = categories.filter((c: any) => c.id !== id);
+    writeCategories(categories);
+
+    // Reassign products that belonged to deleted category to first available category
+    const fallbackId = categories[0]?.id || 'personal-care';
+    const products = readProducts();
+    let updatedProducts = false;
+    products.forEach((p: any) => {
+      if (p.category === id) {
+        p.category = fallbackId;
+        updatedProducts = true;
+      }
+    });
+
+    if (updatedProducts) {
+      writeProducts(products);
+    }
+
+    res.json({ success: true, message: 'Category deleted successfully', fallbackCategory: fallbackId });
+  } catch (err: any) {
+    res.status(500).json({ success: false, message: err?.message || 'Failed to delete category' });
   }
 });
 

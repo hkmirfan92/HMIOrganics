@@ -1,6 +1,6 @@
-import React from 'react';
-import { PageId, Product, BrandSettings, HomePageContent } from '../types';
-import { BRAND_INFO, TRUST_BADGES, PERSONAL_CARE_PRODUCTS, HOME_CARE_PRODUCTS } from '../data/products';
+import React, { useState, useMemo, useEffect } from 'react';
+import { PageId, Product, BrandSettings, HomePageContent, Category } from '../types';
+import { BRAND_INFO, TRUST_BADGES } from '../data/products';
 import { DEFAULT_PAGES_CONTENT } from '../data/pagesContent';
 import { ProductCard } from '../components/ProductCard';
 import { TestimonialsSection } from '../components/TestimonialsSection';
@@ -10,10 +10,14 @@ import {
   Sparkles,
   ShieldCheck,
   Leaf,
-  HeartHandshake,
   CheckCircle2,
   Droplets,
-  Star
+  Search,
+  SlidersHorizontal,
+  ChevronLeft,
+  ChevronRight,
+  PackageOpen,
+  Filter
 } from 'lucide-react';
 
 interface HomePageProps {
@@ -22,8 +26,11 @@ interface HomePageProps {
   onAddToCart: (product: Product) => void;
   cartProductIds: Set<string>;
   products: Product[];
+  categories?: Category[];
   settings?: BrandSettings;
   content?: HomePageContent;
+  selectedCategoryFilter?: string;
+  onSelectCategoryFilter?: (catId: string) => void;
 }
 
 export const HomePage: React.FC<HomePageProps> = ({
@@ -32,29 +39,97 @@ export const HomePage: React.FC<HomePageProps> = ({
   onAddToCart,
   cartProductIds,
   products,
+  categories = [],
   settings,
   content,
+  selectedCategoryFilter = 'all',
+  onSelectCategoryFilter,
 }) => {
   const pageData = content || DEFAULT_PAGES_CONTENT.home;
   const activeWhatsApp = settings?.whatsAppUrl || BRAND_INFO.whatsAppUrl;
   const activePhone = settings?.phone || BRAND_INFO.phone;
   const activePhoneRaw = settings?.phoneRaw || BRAND_INFO.phoneRaw;
 
+  // Active Category & Pagination state
+  const [activeCategory, setActiveCategory] = useState<string>(selectedCategoryFilter || 'all');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [page, setPage] = useState<number>(1);
 
-  // Select top items from live catalog (publicly visible items only)
-  const personalCare = products.filter((p) => p.category === 'personal-care' && p.isVisible !== false);
-  const homeCare = products.filter((p) => p.category === 'home-care' && p.isVisible !== false);
+  // Sync if parent updates selectedCategoryFilter
+  useEffect(() => {
+    if (selectedCategoryFilter && selectedCategoryFilter !== activeCategory) {
+      setActiveCategory(selectedCategoryFilter);
+      setPage(1);
+    }
+  }, [selectedCategoryFilter]);
 
-  const featuredPersonalCare = personalCare.filter((p) => p.isBestseller).length >= 3
-    ? personalCare.filter((p) => p.isBestseller).slice(0, 3)
-    : personalCare.slice(0, 3);
+  // Configurable Products Per Page range set by admin (defaults to 6)
+  const itemsPerPage = Math.max(1, settings?.productsPerPage || 6);
 
-  const featuredHomeCare = homeCare.filter((p) => p.isBestseller).length >= 3
-    ? homeCare.filter((p) => p.isBestseller).slice(0, 3)
-    : homeCare.slice(0, 3);
+  // Default categories fallback
+  const storeCategories: Category[] = categories.length > 0
+    ? categories
+    : [
+        { id: 'personal-care', name: 'Personal Care', icon: '🌿' },
+        { id: 'home-care', name: 'Home & Car Care', icon: '✨' },
+      ];
+
+  // Filtered products list
+  const filteredProducts = useMemo(() => {
+    return products.filter((p) => {
+      if (p.isVisible === false) return false;
+      const matchesCat = activeCategory === 'all' || p.category === activeCategory;
+      const q = searchQuery.trim().toLowerCase();
+      const matchesSearch =
+        !q ||
+        p.name.toLowerCase().includes(q) ||
+        p.subCategory.toLowerCase().includes(q) ||
+        p.description.toLowerCase().includes(q) ||
+        p.keyIngredients.some((i) => i.toLowerCase().includes(q));
+
+      return matchesCat && matchesSearch;
+    });
+  }, [products, activeCategory, searchQuery]);
+
+  // Pagination computations
+  const totalProducts = filteredProducts.length;
+  const totalPages = Math.ceil(totalProducts / itemsPerPage) || 1;
+  const safePage = Math.min(Math.max(1, page), totalPages);
+  const startIndex = (safePage - 1) * itemsPerPage;
+  const paginatedProducts = filteredProducts.slice(startIndex, startIndex + itemsPerPage);
+  const endIndex = Math.min(startIndex + itemsPerPage, totalProducts);
+
+  const handleCategoryClick = (catId: string) => {
+    setActiveCategory(catId);
+    setPage(1);
+    if (onSelectCategoryFilter) {
+      onSelectCategoryFilter(catId);
+    }
+  };
+
+  const handlePageChange = (newPage: number) => {
+    const valid = Math.min(Math.max(1, newPage), totalPages);
+    setPage(valid);
+    const catalogElement = document.getElementById('products-catalog');
+    if (catalogElement) {
+      catalogElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
+  const scrollToCatalogWithCategory = (catId: string) => {
+    setActiveCategory(catId);
+    setPage(1);
+    const el = document.getElementById('products-catalog');
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
+  // Compute product counts for each category
+  const allVisibleCount = products.filter((p) => p.isVisible !== false).length;
 
   return (
-    <div className="space-y-20 pb-16">
+    <div className="space-y-16 pb-16">
       
       {/* 1. HERO SECTION */}
       <section className="relative overflow-hidden bg-gradient-to-b from-[#EFF5F0] via-[#F6FAF6] to-[#FBFBFA] pt-8 sm:pt-14 pb-16 border-b border-[#E3ECE5]">
@@ -76,21 +151,21 @@ export const HomePage: React.FC<HomePageProps> = ({
                 {pageData.heroSubtitle}
               </p>
 
-              {/* Action Buttons */}
+              {/* Action Buttons - Smoothly Scroll to Products Catalog on Main Page */}
               <div className="pt-2 flex flex-wrap items-center gap-4">
                 <button
-                  onClick={() => onNavigate('personal-care')}
+                  onClick={() => scrollToCatalogWithCategory('personal-care')}
                   className="px-6 py-3.5 bg-[#1B4D2E] hover:bg-[#153D24] active:scale-[0.98] text-white text-xs font-bold uppercase tracking-wider rounded-xl shadow-md hover:shadow-lg transition-all flex items-center gap-2.5 cursor-pointer"
                 >
-                  <span>{pageData.heroBtnPrimaryText}</span>
+                  <span>{pageData.heroBtnPrimaryText || 'Explore Personal Care'}</span>
                   <ArrowRight className="w-4 h-4" />
                 </button>
 
                 <button
-                  onClick={() => onNavigate('home-care')}
+                  onClick={() => scrollToCatalogWithCategory('home-care')}
                   className="px-6 py-3.5 bg-white hover:bg-slate-50 active:scale-[0.98] text-[#1B4D2E] border border-[#2C5E43] text-xs font-bold uppercase tracking-wider rounded-xl shadow-2xs hover:shadow transition-all flex items-center gap-2 cursor-pointer"
                 >
-                  <span>{pageData.heroBtnSecondaryText}</span>
+                  <span>{pageData.heroBtnSecondaryText || 'Home & Car Cleaners'}</span>
                 </button>
 
                 <a
@@ -118,35 +193,21 @@ export const HomePage: React.FC<HomePageProps> = ({
             {/* Right Col: Hero Visual Card */}
             <div className="lg:col-span-5">
               <div className="relative rounded-3xl overflow-hidden shadow-xl border border-[#D5E4D8] bg-white group">
-                <img
-                  src={pageData.heroImageUrl || "/hero-botanical-banner.jpg"}
-                  onError={(e) => {
-                    const target = e.currentTarget;
-                    if (!target.src.endsWith('/hero-botanical-banner.jpg')) {
-                      target.src = '/hero-botanical-banner.jpg';
-                    }
-                  }}
-                  alt="HMI Organics pure herbal and eco-friendly products"
-                  className="w-full h-80 sm:h-96 object-cover group-hover:scale-102 transition-transform duration-700"
-                  referrerPolicy="no-referrer"
-                />
-                
-                {/* Overlay card banner */}
-                <div className="p-5 bg-white/95 backdrop-blur-md border-t border-[#E3ECE5] flex items-center justify-between gap-4">
-                  <div>
-                    <p className="text-xs font-bold uppercase tracking-wider text-[#1B4D2E]">
-                      {pageData.heroGuaranteeTitle}
-                    </p>
-                    <p className="text-xs text-[#52705D]">
-                      {pageData.heroGuaranteeSubtitle}
-                    </p>
+                <div className="aspect-4/3 w-full overflow-hidden bg-[#EDF3EE]">
+                  <img
+                    src={pageData.heroImageUrl || '/hero-botanical-banner.jpg'}
+                    alt="HMI Organics pure botanical products"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                  />
+                </div>
+                <div className="p-6 bg-white space-y-2">
+                  <div className="flex items-center gap-2 text-xs font-bold text-[#1F5433]">
+                    <Sparkles className="w-4 h-4 text-[#2C5E43]" />
+                    <span>{pageData.heroGuaranteeTitle}</span>
                   </div>
-                  <button
-                    onClick={() => onNavigate('about')}
-                    className="text-xs font-semibold text-[#1B4D2E] hover:underline whitespace-nowrap shrink-0 cursor-pointer"
-                  >
-                    Our Story →
-                  </button>
+                  <p className="text-xs text-[#52705C] leading-relaxed">
+                    {pageData.heroGuaranteeSubtitle}
+                  </p>
                 </div>
               </div>
             </div>
@@ -189,86 +250,187 @@ export const HomePage: React.FC<HomePageProps> = ({
         </div>
       </section>
 
-
-      {/* 3. FEATURED CATEGORY 1: PERSONAL CARE */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
-          <div>
-            <div className="text-xs font-bold uppercase tracking-wider text-[#2C5E43] mb-1">
-              Holistic Body & Hair
+      {/* 3. ALL PRODUCTS CATALOG WITH LIVE CATEGORY FILTER & PAGINATION (NO SEE MORE BUTTONS) */}
+      <section id="products-catalog" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8 scroll-mt-24">
+        
+        {/* Section Header */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-[#E1EAE3] pb-6">
+          <div className="space-y-1">
+            <div className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[#2C5E43]">
+              <Leaf className="w-3.5 h-3.5 text-[#2C5E43]" />
+              <span>Complete Botanical Collection</span>
             </div>
-            <h2 className="font-display text-2xl sm:text-3xl font-bold text-[#143721]">
-              Personal Care Formulations
+            <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#112F1C]">
+              Our Pure Handcrafted Formulations
             </h2>
-            <p className="text-xs sm:text-sm text-[#4E6F58] mt-1">
-              Natural tooth powder, potent hair growth oil, restorative shampoos & handcrafted soaps.
+            <p className="text-xs sm:text-sm text-[#4E6F58]">
+              Saare organic products yahin par browse karein — category filter select karein ya neeche pages par switch karein.
             </p>
           </div>
 
-          <button
-            onClick={() => onNavigate('personal-care')}
-            className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[#1B4D2E] hover:text-[#12331F] transition-colors cursor-pointer"
-          >
-            <span>View All Personal Care ({personalCare.length})</span>
-            <ArrowRight className="w-4 h-4" />
-          </button>
-        </div>
-
-        {/* Product Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {featuredPersonalCare.map((product) => (
-            <ProductCard
-              key={product.id}
-              product={product}
-              onQuickView={onQuickView}
-              onAddToCart={onAddToCart}
-              isInCart={cartProductIds.has(product.id)}
-              whatsappPhone={activePhoneRaw}
+          {/* Search bar inside catalog */}
+          <div className="w-full md:w-72 relative">
+            <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+            <input
+              type="text"
+              placeholder="Search products or ingredients..."
+              value={searchQuery}
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+                setPage(1);
+              }}
+              className="w-full text-xs pl-9 pr-4 py-2.5 bg-white border border-[#CCDCD0] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2C5E43] shadow-2xs"
             />
-          ))}
-        </div>
-      </section>
-
-      {/* 4. FEATURED CATEGORY 2: HOME & CAR CARE */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
-          <div>
-            <div className="text-xs font-bold uppercase tracking-wider text-[#2C5E43] mb-1">
-              Eco-Conscious Cleaning
-            </div>
-            <h2 className="font-display text-2xl sm:text-3xl font-bold text-[#143721]">
-              Home & Car Care Formulations
-            </h2>
-            <p className="text-xs sm:text-sm text-[#4E6F58] mt-1">
-              Bio-enzyme dishwash, heavy kitchen degreasers, streak-free glass cleaners & pH-neutral car wash.
-            </p>
+            {searchQuery && (
+              <button
+                onClick={() => {
+                  setSearchQuery('');
+                  setPage(1);
+                }}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 text-xs"
+              >
+                ✕
+              </button>
+            )}
           </div>
+        </div>
 
+        {/* Dynamic Category Filter Tabs (Category system retained without navigating away!) */}
+        <div className="flex flex-wrap items-center gap-2.5">
           <button
-            onClick={() => onNavigate('home-care')}
-            className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[#1B4D2E] hover:text-[#12331F] transition-colors cursor-pointer"
+            onClick={() => handleCategoryClick('all')}
+            className={`px-4 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer ${
+              activeCategory === 'all'
+                ? 'bg-[#1B4D2E] text-white shadow-sm ring-2 ring-[#1B4D2E]/20'
+                : 'bg-white text-slate-700 border border-[#D5E1D7] hover:bg-[#F3F8F4]'
+            }`}
           >
-            <span>View All Home & Car Care ({homeCare.length})</span>
-            <ArrowRight className="w-4 h-4" />
+            <span>🌿 All Products</span>
+            <span className={`px-2 py-0.5 text-[10px] rounded-full font-bold ${
+              activeCategory === 'all' ? 'bg-white/20 text-white' : 'bg-[#EBF3ED] text-[#1B4D2E]'
+            }`}>
+              {allVisibleCount}
+            </span>
           </button>
+
+          {storeCategories.map((cat) => {
+            const count = products.filter((p) => p.isVisible !== false && p.category === cat.id).length;
+            const isSelected = activeCategory === cat.id;
+
+            return (
+              <button
+                key={cat.id}
+                onClick={() => handleCategoryClick(cat.id)}
+                className={`px-4 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer ${
+                  isSelected
+                    ? 'bg-[#1B4D2E] text-white shadow-sm ring-2 ring-[#1B4D2E]/20'
+                    : 'bg-white text-slate-700 border border-[#D5E1D7] hover:bg-[#F3F8F4]'
+                }`}
+              >
+                <span>{cat.icon ? `${cat.icon} ` : ''}{cat.name}</span>
+                <span className={`px-2 py-0.5 text-[10px] rounded-full font-bold ${
+                  isSelected ? 'bg-white/20 text-white' : 'bg-[#EBF3ED] text-[#1B4D2E]'
+                }`}>
+                  {count}
+                </span>
+              </button>
+            );
+          })}
         </div>
 
-        {/* Product Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {featuredHomeCare.map((product) => (
-            <ProductCard
-              key={product.id}
-              product={product}
-              onQuickView={onQuickView}
-              onAddToCart={onAddToCart}
-              isInCart={cartProductIds.has(product.id)}
-              whatsappPhone={activePhoneRaw}
-            />
-          ))}
-        </div>
+        {/* Products Grid */}
+        {paginatedProducts.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {paginatedProducts.map((product) => (
+              <ProductCard
+                key={product.id}
+                product={product}
+                onQuickView={onQuickView}
+                onAddToCart={onAddToCart}
+                isInCart={cartProductIds.has(product.id)}
+                whatsappPhone={activePhoneRaw}
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="py-16 text-center bg-white rounded-3xl border border-[#DFE7E1] space-y-3 p-8">
+            <PackageOpen className="w-12 h-12 text-[#99B6A1] mx-auto" />
+            <h3 className="font-bold text-base text-[#143721]">No Products Found</h3>
+            <p className="text-xs text-slate-500 max-w-sm mx-auto">
+              Selected category ya search query ke mutabiq koi product available nahi hai. Filter reset karke dobara check karein.
+            </p>
+            <button
+              onClick={() => {
+                setActiveCategory('all');
+                setSearchQuery('');
+                setPage(1);
+              }}
+              className="px-4 py-2 bg-[#EEF5EF] text-[#1B4D2E] font-semibold text-xs rounded-xl hover:bg-[#E2EDE4] transition-colors cursor-pointer"
+            >
+              Reset Filters
+            </button>
+          </div>
+        )}
+
+        {/* PAGINATION CONTROLS (Configured by Admin Range) */}
+        {totalPages > 1 && (
+          <div className="pt-6 border-t border-[#E1EAE3] flex flex-col sm:flex-row items-center justify-between gap-4">
+            
+            {/* Showing Range Summary */}
+            <div className="text-xs text-[#4F705A]">
+              Showing <strong>{startIndex + 1}–{endIndex}</strong> of <strong>{totalProducts}</strong> products
+              <span className="text-slate-400 mx-1.5">·</span>
+              <span>Page <strong>{safePage}</strong> of <strong>{totalPages}</strong></span>
+              <span className="text-slate-400 mx-1.5">·</span>
+              <span className="text-[11px] text-slate-400">({itemsPerPage} products per page)</span>
+            </div>
+
+            {/* Page Number Buttons */}
+            <div className="flex items-center gap-1.5">
+              <button
+                onClick={() => handlePageChange(safePage - 1)}
+                disabled={safePage <= 1}
+                className="inline-flex items-center gap-1 px-3 py-2 text-xs font-semibold rounded-xl border border-[#D5E1D7] bg-white text-slate-700 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer transition-colors"
+                aria-label="Previous Page"
+              >
+                <ChevronLeft className="w-4 h-4" />
+                <span className="hidden sm:inline">Prev</span>
+              </button>
+
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((num) => {
+                const isActive = num === safePage;
+                return (
+                  <button
+                    key={num}
+                    onClick={() => handlePageChange(num)}
+                    className={`min-w-9 h-9 text-xs font-bold rounded-xl transition-all flex items-center justify-center cursor-pointer ${
+                      isActive
+                        ? 'bg-[#1B4D2E] text-white shadow-sm ring-2 ring-[#1B4D2E]/20'
+                        : 'bg-white text-slate-700 border border-[#D5E1D7] hover:bg-[#F3F8F4]'
+                    }`}
+                  >
+                    {num}
+                  </button>
+                );
+              })}
+
+              <button
+                onClick={() => handlePageChange(safePage + 1)}
+                disabled={safePage >= totalPages}
+                className="inline-flex items-center gap-1 px-3 py-2 text-xs font-semibold rounded-xl border border-[#D5E1D7] bg-white text-slate-700 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer transition-colors"
+                aria-label="Next Page"
+              >
+                <span className="hidden sm:inline">Next</span>
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
+
+          </div>
+        )}
+
       </section>
 
-      {/* 5. TRUST BADGES & CONTACT HIGHLIGHTS */}
+      {/* 4. TRUST BADGES & CONTACT HIGHLIGHTS */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="bg-[#183925] text-white rounded-3xl p-8 sm:p-12 shadow-lg">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
@@ -283,7 +445,6 @@ export const HomePage: React.FC<HomePageProps> = ({
               <p className="text-sm text-[#C4DEC9] leading-relaxed max-w-lg">
                 {pageData.bannerSubtitle}
               </p>
-
 
               <div className="pt-2 flex flex-wrap items-center gap-4 text-xs">
                 <a
@@ -317,7 +478,7 @@ export const HomePage: React.FC<HomePageProps> = ({
         </div>
       </section>
 
-      {/* 6. VERIFIED CUSTOMER TESTIMONIALS WITH STAR RATINGS */}
+      {/* 5. VERIFIED CUSTOMER TESTIMONIALS WITH STAR RATINGS */}
       <TestimonialsSection />
 
     </div>

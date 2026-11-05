@@ -1,0 +1,16 @@
+[
+  {
+    "id": "personal-care",
+    "name": "Personal Care",
+    "description": "Pure herbal hair growth oils, tooth powder, botanical soaps & gentle care.",
+    "icon": "🌿",
+    "displayOrder": 1
+  },
+  {
+    "id": "home-care",
+    "name": "Home & Car Care",
+    "description": "Bio-enzymatic kitchen cleaners, streak-free glass sprays & eco car washes.",
+    "icon": "✨",
+    "displayOrder": 2
+  }
+]

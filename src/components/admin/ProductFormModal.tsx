@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Product, ProductCategory } from '../../types';
+import { Product, ProductCategory, Category } from '../../types';
 import { X, Save, Leaf, Sparkles, Check, AlertCircle, Eye, EyeOff, Upload, Image as ImageIcon, Loader2 } from 'lucide-react';
 import { api } from '../../services/api';
 
@@ -8,6 +8,7 @@ interface ProductFormModalProps {
   onClose: () => void;
   onSave: (productData: Partial<Product>) => Promise<void>;
   productToEdit?: Product | null;
+  categories?: Category[];
 }
 
 const EMOJI_OPTIONS = ['🌿', '🧴', '🧼', '🪥', '🫧', '🍋', '🚗', '✨', '🪟', '🪵', '🐝', '🌲', '🧺', '🌸', '🍃', '💧', '🌾', '🌱'];
@@ -17,6 +18,7 @@ export const ProductFormModal: React.FC<ProductFormModalProps> = ({
   onClose,
   onSave,
   productToEdit,
+  categories = [],
 }) => {
   const [name, setName] = useState('');
   const [category, setCategory] = useState<ProductCategory>('personal-care');
@@ -215,7 +217,10 @@ export const ProductFormModal: React.FC<ProductFormModalProps> = ({
                 onChange={(e) => {
                   const newCat = e.target.value as ProductCategory;
                   setCategory(newCat);
-                  if (newCat === 'personal-care') {
+                  const matched = categories.find((c) => c.id === newCat);
+                  if (matched?.icon) {
+                    setCustomEmoji(matched.icon);
+                  } else if (newCat === 'personal-care') {
                     setSubCategory('Skin Care');
                     setCustomEmoji('🌿');
                   } else {
@@ -225,8 +230,18 @@ export const ProductFormModal: React.FC<ProductFormModalProps> = ({
                 }}
                 className="w-full text-xs px-3.5 py-2.5 bg-[#FAFDFB] border border-[#CCDCD0] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2C5E43]"
               >
-                <option value="personal-care">Personal Care (Hair, Skin, Teeth)</option>
-                <option value="home-care">Home & Car Care (Cleaners, Polish, Laundry)</option>
+                {categories.length > 0 ? (
+                  categories.map((c) => (
+                    <option key={c.id} value={c.id}>
+                      {c.icon ? `${c.icon} ` : ''}{c.name}
+                    </option>
+                  ))
+                ) : (
+                  <>
+                    <option value="personal-care">🌿 Personal Care (Hair, Skin, Teeth)</option>
+                    <option value="home-care">✨ Home & Car Care (Cleaners, Polish, Laundry)</option>
+                  </>
+                )}
               </select>
             </div>
           </div>

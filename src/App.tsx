@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import {
   PageId,
   Product,
+  Category,
   CartItem,
   BrandSettings,
   SitePagesContent,
@@ -32,6 +33,8 @@ export default function App() {
   const [currentPage, setCurrentPage] = useState<PageId>('home');
   const [isAdminAuthenticated, setIsAdminAuthenticated] = useState<boolean>(() => api.isAuthenticated());
   const [products, setProducts] = useState<Product[]>(ALL_PRODUCTS);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [homeCategoryFilter, setHomeCategoryFilter] = useState<string>('all');
   const [settings, setSettings] = useState<BrandSettings>({
     ...BRAND_INFO,
     topBannerNotice: '🌿 Handcrafted Pure Herbal & Eco-Friendly Care · Fast Delivery Across All Cities in Pakistan',
@@ -53,13 +56,14 @@ export default function App() {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
 
-  // Load products, settings, pages content, and SEO from backend on mount
+  // Load products, categories, settings, pages content, and SEO from backend on mount
   useEffect(() => {
     let mounted = true;
     async function loadInitialData() {
       try {
-        const [loadedProducts, loadedSettings, loadedPages, loadedSeo, loadedAnalytics] = await Promise.all([
+        const [loadedProducts, loadedCategories, loadedSettings, loadedPages, loadedSeo, loadedAnalytics] = await Promise.all([
           api.getProducts(),
+          api.getCategories(),
           api.getSettings(),
           api.getPages(),
           api.getSeo(),
@@ -68,6 +72,9 @@ export default function App() {
         if (mounted) {
           if (Array.isArray(loadedProducts) && loadedProducts.length > 0) {
             setProducts(loadedProducts);
+          }
+          if (Array.isArray(loadedCategories) && loadedCategories.length > 0) {
+            setCategories(loadedCategories);
           }
           if (loadedSettings) {
             setSettings(loadedSettings);
@@ -155,6 +162,24 @@ export default function App() {
       topBannerNotice: '🌿 Handcrafted Pure Herbal & Eco-Friendly Care · Fast Delivery Across All Cities in Pakistan',
     };
     setSettings(defaultSettings);
+  };
+
+  const handleAddCategory = async (catData: Partial<Category>) => {
+    const created = await api.createCategory(catData);
+    setCategories((prev) => [...prev, created]);
+  };
+
+  const handleUpdateCategory = async (id: string, updates: Partial<Category>) => {
+    const updated = await api.updateCategory(id, updates);
+    setCategories((prev) => prev.map((c) => (c.id === id ? updated : c)));
+  };
+
+  const handleDeleteCategory = async (id: string) => {
+    await api.deleteCategory(id);
+    setCategories((prev) => prev.filter((c) => c.id !== id));
+    // Reload products because any products in deleted category were safely reassigned to fallback
+    const freshProducts = await api.getProducts();
+    setProducts(freshProducts);
   };
 
   const handleUpdateSettings = async (newSettings: Partial<BrandSettings>) => {
@@ -278,6 +303,8 @@ export default function App() {
         onOpenCart={() => setIsCartOpen(true)}
         settings={settings}
         isAdminAuthenticated={isAdminAuthenticated}
+        categories={categories}
+        onSelectCategoryFilter={setHomeCategoryFilter}
       />
 
       {/* Active Page View */}
@@ -289,8 +316,11 @@ export default function App() {
             onAddToCart={handleAddToCart}
             cartProductIds={cartProductIds}
             products={products}
+            categories={categories}
             settings={settings}
             content={pagesContent.home}
+            selectedCategoryFilter={homeCategoryFilter}
+            onSelectCategoryFilter={setHomeCategoryFilter}
           />
         )}
 
@@ -339,6 +369,7 @@ export default function App() {
           ) : (
             <AdminPage
               products={products}
+              categories={categories}
               settings={settings}
               pagesContent={pagesContent}
               seoSettings={seoSettings}
@@ -346,6 +377,9 @@ export default function App() {
               onUpdateProduct={handleUpdateProduct}
               onDeleteProduct={handleDeleteProduct}
               onResetCatalog={handleResetCatalog}
+              onAddCategory={handleAddCategory}
+              onUpdateCategory={handleUpdateCategory}
+              onDeleteCategory={handleDeleteCategory}
               onUpdateSettings={handleUpdateSettings}
               onUpdatePagesContent={handleUpdatePagesContent}
               onResetPagesContent={handleResetPagesContent}

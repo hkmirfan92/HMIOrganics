@@ -1,4 +1,12 @@
-export type ProductCategory = 'personal-care' | 'home-care';
+export type ProductCategory = 'personal-care' | 'home-care' | string;
+
+export interface Category {
+  id: string;
+  name: string;
+  description?: string;
+  icon?: string;
+  displayOrder?: number;
+}
 
 export interface Product {
   id: string;
@@ -32,6 +40,7 @@ export interface BrandSettings {
   topBannerNotice?: string;
   logoUrl?: string;
   faviconUrl?: string;
+  productsPerPage?: number;
 }
 
 export interface CartItem {

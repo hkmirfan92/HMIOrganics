@@ -10,5 +10,6 @@
   "deliveryNotice": "Delivering across Karachi, Lahore, Islamabad, Faisalabad, Peshawar, and all of Pakistan",
   "topBannerNotice": "🌿 Handcrafted Pure Herbal & Eco-Friendly Care · Fast Delivery Across All Cities in Pakistan",
   "logoUrl": "/assets/aistudio/IMG-20261007-WA0000-Photoroom_407330cc.png",
-  "faviconUrl": "/favicon.png"
+  "faviconUrl": "/favicon.png",
+  "productsPerPage": 6
 }

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BrandSettings } from '../../types';
-import { X, Save, MessageCircle, Phone, Mail, MapPin, Bell, HardDriveDownload } from 'lucide-react';
+import { X, Save, MessageCircle, Phone, Mail, MapPin, Bell, HardDriveDownload, SlidersHorizontal } from 'lucide-react';
 
 interface SettingsModalProps {
   isOpen: boolean;
@@ -21,6 +21,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   const [topBannerNotice, setTopBannerNotice] = useState('');
   const [deliveryNotice, setDeliveryNotice] = useState('');
   const [address, setAddress] = useState('');
+  const [productsPerPage, setProductsPerPage] = useState<number>(6);
   const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
@@ -29,6 +30,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
       setPhoneRaw(settings.phoneRaw || '923052211093');
       setEmail(settings.email || 'hmiorganicspk@gmail.com');
       setAddress(settings.address || 'C 65/29, 2nd Floor, Street 2, Punjab Colony, Karachi.');
+      setProductsPerPage(settings.productsPerPage || 6);
       setTopBannerNotice(
         settings.topBannerNotice ||
           '🌿 Handcrafted Pure Herbal & Eco-Friendly Care · Fast Delivery Across All Cities in Pakistan'
@@ -52,6 +54,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
         phoneRaw: cleanRaw,
         email: email.trim(),
         address: address.trim(),
+        productsPerPage: Math.max(1, Math.min(60, Number(productsPerPage) || 6)),
         topBannerNotice: topBannerNotice.trim(),
         deliveryNotice: deliveryNotice.trim(),
         whatsAppUrl: `https://wa.me/${cleanRaw}`,
@@ -157,6 +160,25 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
               placeholder="e.g. C 65/29, 2nd Floor, Street 2, Punjab Colony, Karachi."
               className="w-full text-xs px-3.5 py-2.5 bg-[#FAFDFB] border border-[#CCDCD0] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2C5E43]"
             />
+          </div>
+
+          <div>
+            <label className="block font-semibold text-slate-700 mb-1 flex items-center gap-1.5">
+              <SlidersHorizontal className="w-3.5 h-3.5 text-[#2C5E43]" /> Products Per Page (Pagination Range)
+            </label>
+            <div className="flex items-center gap-3">
+              <input
+                type="number"
+                min="1"
+                max="60"
+                value={productsPerPage}
+                onChange={(e) => setProductsPerPage(Math.max(1, parseInt(e.target.value) || 1))}
+                className="w-24 text-center text-xs font-bold px-3 py-2.5 bg-[#FAFDFB] border border-[#CCDCD0] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2C5E43]"
+              />
+              <span className="text-[11px] text-slate-500">
+                Itne products ke baad main page par Page 2, Page 3 show honge
+              </span>
+            </div>
           </div>
 
           <div>
