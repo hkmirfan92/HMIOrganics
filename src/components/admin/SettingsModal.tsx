@@ -20,6 +20,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   const [email, setEmail] = useState('');
   const [topBannerNotice, setTopBannerNotice] = useState('');
   const [deliveryNotice, setDeliveryNotice] = useState('');
+  const [address, setAddress] = useState('');
   const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
@@ -27,6 +28,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
       setPhone(settings.phone || '+92 305 2211093');
       setPhoneRaw(settings.phoneRaw || '923052211093');
       setEmail(settings.email || 'hmiorganicspk@gmail.com');
+      setAddress(settings.address || 'C 65/29, 2nd Floor, Street 2, Punjab Colony, Karachi.');
       setTopBannerNotice(
         settings.topBannerNotice ||
           '🌿 Handcrafted Pure Herbal & Eco-Friendly Care · Fast Delivery Across All Cities in Pakistan'
@@ -49,6 +51,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
         phone: phone.trim(),
         phoneRaw: cleanRaw,
         email: email.trim(),
+        address: address.trim(),
         topBannerNotice: topBannerNotice.trim(),
         deliveryNotice: deliveryNotice.trim(),
         whatsAppUrl: `https://wa.me/${cleanRaw}`,
@@ -139,6 +142,19 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
               value={topBannerNotice}
               onChange={(e) => setTopBannerNotice(e.target.value)}
               placeholder="Notice shown at the very top of the website"
+              className="w-full text-xs px-3.5 py-2.5 bg-[#FAFDFB] border border-[#CCDCD0] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2C5E43]"
+            />
+          </div>
+
+          <div>
+            <label className="block font-semibold text-slate-700 mb-1 flex items-center gap-1.5">
+              <MapPin className="w-3.5 h-3.5 text-[#2C5E43]" /> Office & Studio Address
+            </label>
+            <input
+              type="text"
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+              placeholder="e.g. C 65/29, 2nd Floor, Street 2, Punjab Colony, Karachi."
               className="w-full text-xs px-3.5 py-2.5 bg-[#FAFDFB] border border-[#CCDCD0] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2C5E43]"
             />
           </div>

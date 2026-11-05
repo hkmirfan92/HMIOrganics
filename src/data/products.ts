@@ -279,6 +279,7 @@ export const BRAND_INFO = {
   email: 'hmiorganicspk@gmail.com',
   whatsAppUrl: 'https://wa.me/923052211093',
   location: 'Karachi, Pakistan (Nationwide Delivery)',
+  address: 'C 65/29, 2nd Floor, Street 2, Punjab Colony, Karachi.',
   deliveryNotice: 'Delivering across Karachi, Lahore, Islamabad, Faisalabad, Peshawar, and all of Pakistan',
   logoUrl: '/assets/aistudio/IMG-20261007-WA0000-Photoroom_407330cc.png',
   faviconUrl: '/favicon.png'

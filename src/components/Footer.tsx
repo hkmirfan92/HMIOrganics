@@ -22,6 +22,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, settings, content })
   const activePhoneRaw = settings?.phoneRaw || BRAND_INFO.phoneRaw;
   const activeEmail = settings?.email || BRAND_INFO.email;
   const activeDelivery = settings?.deliveryNotice || BRAND_INFO.deliveryNotice;
+  const activeAddress = settings?.address || BRAND_INFO.address || 'C 65/29, 2nd Floor, Street 2, Punjab Colony, Karachi.';
 
   return (
     <footer className="bg-[#12241A] text-[#E0EBE2] border-t border-[#1C3829]">
@@ -181,6 +182,12 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, settings, content })
               </a>
               <div className="flex items-start gap-2 text-xs text-[#9BB1A1] pt-1">
                 <MapPin className="w-4 h-4 text-[#7BD490] shrink-0 mt-0.5" />
+                <div>
+                  <span className="text-[#E0EBE2] block font-medium">Office & Dispatch:</span>
+                  <span className="text-xs text-[#C8D9CB] leading-relaxed block">{activeAddress}</span>
+                </div>
+              </div>
+              <div className="text-[11px] text-[#8CB495] pl-6">
                 <span>{activeDelivery}</span>
               </div>
             </div>

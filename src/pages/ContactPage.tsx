@@ -35,6 +35,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({ settings, content }) =
   const activePhoneRaw = settings?.phoneRaw || BRAND_INFO.phoneRaw;
   const activeEmail = settings?.email || BRAND_INFO.email;
   const activeDelivery = settings?.deliveryNotice || BRAND_INFO.deliveryNotice;
+  const activeAddress = settings?.address || BRAND_INFO.address || 'C 65/29, 2nd Floor, Street 2, Punjab Colony, Karachi.';
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -272,6 +273,21 @@ export const ContactPage: React.FC<ContactPageProps> = ({ settings, content }) =
                     <a href={`mailto:${activeEmail}`} className="hover:text-[#1B4D2E] text-slate-600 break-all">
                       {activeEmail}
                     </a>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3">
+                  <div className="p-2 bg-[#EEF5EF] text-[#2C5E43] rounded-lg shrink-0 mt-0.5">
+                    <MapPin className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <span className="font-semibold text-slate-900 block">Office & Studio Address</span>
+                    <span className="text-slate-700 leading-relaxed block font-medium">
+                      {activeAddress}
+                    </span>
+                    <span className="text-[11px] text-[#2C5E43] font-semibold mt-0.5 block">
+                      Punjab Colony, Karachi, Pakistan
+                    </span>
                   </div>
                 </div>
 

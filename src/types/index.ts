@@ -27,6 +27,7 @@ export interface BrandSettings {
   email: string;
   whatsAppUrl: string;
   location: string;
+  address?: string;
   deliveryNotice: string;
   topBannerNotice?: string;
   logoUrl?: string;
@@ -102,6 +103,7 @@ export interface ContactPageContent {
   formSubtitle: string;
   operatingHours: string;
   dispatchWarehouse: string;
+  address?: string;
   faqs: Array<{
     q: string;
     a: string;

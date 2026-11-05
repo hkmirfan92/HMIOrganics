@@ -174,6 +174,10 @@ export const SeoHeadManager: React.FC<SeoHeadManagerProps> = ({
           priceRange: 'PKR 250 - PKR 1800',
           address: {
             '@type': 'PostalAddress',
+            streetAddress: settings?.address || 'C 65/29, 2nd Floor, Street 2, Punjab Colony',
+            addressLocality: 'Karachi',
+            addressRegion: 'Sindh',
+            postalCode: '75500',
             addressCountry: 'PK',
           },
         };
