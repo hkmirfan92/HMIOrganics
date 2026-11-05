@@ -1,0 +1,6 @@
+{
+  "name": "HMI Organics",
+  "description": "Pure, natural, and trusted eco-friendly care for home and body with herbal formulations.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

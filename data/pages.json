@@ -1,0 +1,139 @@
+{
+  "home": {
+    "heroBadge": "100% Herbal & Eco-Friendly Formulations",
+    "heroTitle": "Pure, Natural & Effective Care for Home and Body",
+    "heroSubtitle": "Experience the harmony of traditional botanical wisdom and clean eco-science. Handcrafted herbal personal grooming and plant-powered home care without toxic fillers.",
+    "heroBtnPrimaryText": "Shop Personal Care",
+    "heroBtnSecondaryText": "Shop Home & Car Care",
+    "heroImageUrl": "/hero-botanical-banner.jpg",
+    "heroGuaranteeTitle": "HMI Organics Guarantee",
+    "heroGuaranteeSubtitle": "Pure botanical extracts · Biodegradable formulas",
+    "heroTrustBadges": [
+      "Zero Harmful Chemicals",
+      "Safe for Kids & Pets",
+      "All Pakistan Delivery"
+    ],
+    "introBadge": "The HMI Organics Distinction",
+    "introTitle": "Crafted with Integrity, Backed by Nature",
+    "introDescription": "At HMI Organics, we believe clean living starts in the products you touch every day. We reject harsh bleaching agents, caustic sodas, synthetic sulfates, and artificial fragrances. Every formula is thoughtfully crafted in Pakistan with uncompromised potency and environmental care.",
+    "introPillars": [
+      {
+        "title": "Herbal & Botanical Purity",
+        "description": "Cold-pressed oils, neem, reetha, clove, and natural essential oils that nourish your skin and scalp gently and naturally."
+      },
+      {
+        "title": "Plant-Powered Eco Action",
+        "description": "Bio-enzymatic cleaning agents, orange terpenes, and pine oil that cut deep grease and grime without toxic fumes or residue."
+      },
+      {
+        "title": "Safe for Family & Pets",
+        "description": "Non-corrosive, non-toxic formulations designed specifically for safety around infants, children, elders, and domestic pets."
+      }
+    ],
+    "categoryPersonalTitle": "Personal Care Collection",
+    "categoryPersonalSubtitle": "Herbal therapies formulated with whole plant extracts, cold-pressed oils, and zero sulfates for genuine wellness.",
+    "categoryHomeTitle": "Home & Car Care Collection",
+    "categoryHomeSubtitle": "Powerful bio-enzymatic cleaners, degreasers, and plant-based polishes that keep your living spaces spotless and toxin-free.",
+    "bannerTitle": "Ready to Experience Honest Organic Living?",
+    "bannerSubtitle": "Order directly via WhatsApp for quick nationwide delivery across Pakistan. Cash on delivery & online bank transfer available.",
+    "bannerHighlight": "Free delivery on orders over PKR 2,500 across Karachi, Lahore & Islamabad"
+  },
+  "personalCare": {
+    "badge": "Herbal Personal Care Collection",
+    "title": "Nourish Your Body with Earth's Purest Herbs",
+    "description": "Explore our therapeutic line of natural tooth powder, cold-pressed hair growth oils, revitalizing shampoos, gentle glycerin bars, and antibacterial handwashes. Free of harsh SLS, parabens, and microplastics.",
+    "imageUrl": "/personal-care-banner.jpg",
+    "highlights": [
+      "100% Herbal Extracts",
+      "Gentle on Sensitive Skin",
+      "Cruelty-Free Formulations",
+      "No Synthetic Sulfates"
+    ]
+  },
+  "homeCare": {
+    "badge": "Plant-Powered Cleaning Science",
+    "title": "Safe, Effective & Eco-Friendly Care for Home & Car",
+    "description": "Replace hazardous caustic chemicals, choking acids, and chlorine fumes with bio-enzyme power, orange terpenes, pine essential oils, and natural carnauba wax. Pristine cleanliness with complete family safety.",
+    "imageUrl": "/home-cleaning-banner.jpg",
+    "highlights": [
+      "Bio-Enzymatic Clean",
+      "Zero Caustic Soda",
+      "Pet & Child Safe",
+      "Biodegradable Greywater"
+    ]
+  },
+  "about": {
+    "headerBadge": "Our Roots & Philosophy",
+    "headerTitle": "Purity in Every Drop, Safety in Every Home",
+    "headerDescription": "The story of HMI Organics: born from a simple realization that daily hygiene and household cleaning should nourish life, never compromise it.",
+    "storyBadge": "How It Began",
+    "storyTitle": "Crafting High-Quality Organic Care with Safety & Purity First",
+    "storyParagraphs": [
+      "In an era where market shelves in Pakistan are dominated by cleaners loaded with caustic soda, toxic chlorine fumes, and skin-drying synthetic chemicals, we saw a critical need for an honest alternative.",
+      "HMI Organics was founded with an unyielding commitment: to develop herbal personal care products and eco-friendly household essentials that deliver superior results without risking the respiratory health of your family, irritating your hands, or polluting Pakistan's waterways.",
+      "From infusing cold-pressed rosemary and bhringraj for our celebrated Hair Growth Oil, to utilizing fermented citrus bio-enzymes in our dishwash and degreasers, every formulation is batched with meticulous care, laboratory safety checks, and deep respect for nature."
+    ],
+    "storyHighlights": [
+      "Zero Caustic Chemicals",
+      "Cold-Pressed Pure Oils",
+      "Child & Pet Conscious",
+      "Ethically Made in Pakistan"
+    ],
+    "storyImageUrl": "/about-craftsmanship.jpg",
+    "storyImageCaption": "Small-Batch Integrity: Every blend is hand-tested for stability, skin-neutral pH, and natural therapeutic potency.",
+    "missionTitle": "Our Mission",
+    "missionDescription": "To eliminate toxic household and grooming chemicals across Pakistani households by providing plant-powered, truly effective, affordable organic alternatives.",
+    "visionTitle": "Our Vision",
+    "visionDescription": "A cleaner, healthier Pakistan where conscious households enjoy pristine living spaces and thriving personal health in harmony with nature.",
+    "stats": [
+      {
+        "value": "100%",
+        "label": "Herbal & Bio-Active"
+      },
+      {
+        "value": "0%",
+        "label": "Caustic Bleach & Toxins"
+      },
+      {
+        "value": "10,000+",
+        "label": "Happy Pakistani Homes"
+      },
+      {
+        "value": "100%",
+        "label": "Cruelty-Free & Eco-Conscious"
+      }
+    ]
+  },
+  "contact": {
+    "headerBadge": "Direct Assistance & Nationwide Orders",
+    "headerTitle": "Get in Touch with HMI Organics",
+    "headerDescription": "We love connecting with our customers. Reach out for custom advice, product inquiries, or instant orders via WhatsApp.",
+    "formTitle": "Send Us a Message",
+    "formSubtitle": "Fill in your details below and our team will get back to you promptly.",
+    "operatingHours": "Monday - Saturday: 9:00 AM – 8:00 PM (PKT)",
+    "dispatchWarehouse": "Central Dispatch Hub, Karachi & Lahore Delivery Centers, Pakistan",
+    "faqs": [
+      {
+        "q": "How do I place an order via WhatsApp?",
+        "a": "Simply click any \"Order via WhatsApp\" button on a product card or use our floating WhatsApp icon. Send us your required products and delivery address, and our team will immediately verify stock and confirm payment/cash on delivery details."
+      },
+      {
+        "q": "Where do you deliver and what is the delivery timeline?",
+        "a": "We deliver nationwide across Pakistan. Major cities like Karachi, Lahore, Islamabad, and Rawalpindi receive deliveries within 24 to 48 hours. Other cities and regions receive orders within 3 to 4 business days via registered courier."
+      },
+      {
+        "q": "Are your home cleaning products safe around babies and pets?",
+        "a": "Yes, 100%! Unlike conventional cleaning solutions that use caustic soda, hydrochloric acid, or harsh black phenyle, our products are made from citrus bio-enzymes, pure pine oil, and plant glucosides. They leave no toxic residues."
+      },
+      {
+        "q": "Do you offer bulk, wholesale, or salon packages?",
+        "a": "Yes, we provide bulk gallon refills for homes, car detailing shops, offices, and salons at special discounted rates. Inquire directly on WhatsApp (+92 305 2211093) with your volume requirement."
+      }
+    ]
+  },
+  "global": {
+    "topAnnouncement": "🌿 Handcrafted Pure Herbal & Eco-Friendly Care · Fast Delivery Across All Cities in Pakistan",
+    "footerTagline": "Pure, Natural & Effective Organic Care for Home and Body",
+    "footerAboutText": "HMI Organics provides natural herbal personal care and eco-friendly home cleaning products handcrafted in Pakistan. Safe for your skin, your home, and the planet."
+  }
+}

@@ -1,0 +1,76 @@
+{
+  "siteTitle": "HMI Organics — Pure Herbal Care & Eco-Friendly Home Products",
+  "siteDescription": "Shop handcrafted herbal personal care and eco-friendly home & car cleaners in Pakistan. 100% natural, non-toxic formulations with fast nationwide WhatsApp delivery.",
+  "keywords": "HMI Organics, organic products Pakistan, herbal shampoo, hair growth oil Pakistan, tooth powder, eco home cleaner, non-toxic dishwash, car wash Pakistan, pure glycerine soap, bio enzymatic degreaser",
+  "canonicalBaseUrl": "https://hmiorganics.com",
+  "ogSiteName": "HMI Organics",
+  "ogImageUrl": "/hero-botanical-banner.jpg",
+  "twitterHandle": "@hmiorganicspk",
+  "googleVerificationCode": "z4xzaul0jLsxoFeavHhf7q1g-xqDkywv6D9Jz6IVQeQ",
+  "bingVerificationCode": "bing-site-verification-hmi-2026",
+  "enableJsonLd": true,
+  "organizationName": "HMI Organics Pakistan",
+  "organizationLogo": "/assets/aistudio/IMG-20261007-WA0000-Photoroom_407330cc.png",
+  "pages": {
+    "home": {
+      "title": "HMI Organics — Pure Herbal Care & Eco-Friendly Home Products",
+      "description": "Discover handcrafted herbal personal care and plant-powered eco cleaners. 100% toxic-free, safe for children and pets with fast nationwide delivery in Pakistan.",
+      "keywords": "HMI Organics home, organic personal care, natural cleaners Pakistan, eco friendly living",
+      "canonicalUrl": "https://hmiorganics.com",
+      "ogImage": "/hero-botanical-banner.jpg",
+      "noIndex": false
+    },
+    "personal-care": {
+      "title": "Organic Personal Care & Herbal Hair Care | HMI Organics",
+      "description": "Explore pure herbal tooth powder, cold-pressed rosemary hair growth oil, sulfate-free shampoos, and gentle glycerin soaps. Pure Ayurvedic wellness.",
+      "keywords": "herbal tooth powder, rosemary hair oil Pakistan, sulfate free shampoo, organic glycerin soap, neem handwash",
+      "canonicalUrl": "https://hmiorganics.com/personal-care",
+      "ogImage": "/personal-care-banner.jpg",
+      "noIndex": false
+    },
+    "home-care": {
+      "title": "Eco-Friendly Home & Car Cleaning Products | HMI Organics",
+      "description": "Bio-enzymatic dishwash, heavy kitchen degreaser, carnauba car polish, and pine floor cleaners. Clean deeply without corrosive acids or toxic bleach.",
+      "keywords": "eco dishwash liquid Pakistan, kitchen degreaser spray, natural car polish, pine phenyl cleaner, non toxic laundry blue",
+      "canonicalUrl": "https://hmiorganics.com/home-care",
+      "ogImage": "/home-cleaning-banner.jpg",
+      "noIndex": false
+    },
+    "about": {
+      "title": "Our Story & Herbal Craftsmanship | HMI Organics Pakistan",
+      "description": "Learn how HMI Organics was founded with a mission to eliminate hazardous cleaning chemicals and deliver potent botanical wellness across Pakistan.",
+      "keywords": "about HMI Organics, eco friendly brand story Pakistan, small batch herbal production, chemical free philosophy",
+      "canonicalUrl": "https://hmiorganics.com/about",
+      "ogImage": "/about-craftsmanship.jpg",
+      "noIndex": false
+    },
+    "contact": {
+      "title": "Order via WhatsApp & Contact Us | HMI Organics (+92 305 2211093)",
+      "description": "Direct WhatsApp order hotline (+92 305 2211093), customer service inquiries, wholesale requests, and delivery status across Pakistan.",
+      "keywords": "contact HMI Organics, WhatsApp order HMI, customer support Karachi Lahore Islamabad, delivery tracking",
+      "canonicalUrl": "https://hmiorganics.com/contact",
+      "ogImage": "/hero-botanical-banner.jpg",
+      "noIndex": false
+    }
+  },
+  "productOverrides": {
+    "hair-growth-oil": {
+      "productId": "hair-growth-oil",
+      "customTitle": "Herbal Hair Growth Oil (Cold-Pressed) | HMI Organics",
+      "customDescription": "Therapeutic cold-pressed rosemary, bhringraj, and almond hair oil. Clinically tested to reduce hair thinning and nourish scalp roots naturally in Pakistan.",
+      "focusKeyword": "hair growth oil Pakistan"
+    },
+    "kitchen-degreaser": {
+      "productId": "kitchen-degreaser",
+      "customTitle": "Eco Kitchen Degreaser & Stove Cleaner Spray | HMI Organics",
+      "customDescription": "Heavy-duty citrus bio-enzymatic kitchen degreaser spray. Melts baked-on grease, burnt oils, and chimney grime without toxic acid fumes.",
+      "focusKeyword": "kitchen degreaser spray Pakistan"
+    },
+    "tooth-powder": {
+      "productId": "tooth-powder",
+      "customTitle": "Natural Herbal Tooth Powder with Clove & Rock Salt | HMI Organics",
+      "customDescription": "Ayurvedic tooth powder for strong gums, enamel protection, and fresh breath with clove oil and Himalayan rock salt.",
+      "focusKeyword": "herbal tooth powder"
+    }
+  }
+}

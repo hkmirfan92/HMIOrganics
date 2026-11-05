@@ -1,0 +1,236 @@
+{
+  "settings": {
+    "gaMeasurementId": "G-HMI9230522",
+    "gtmContainerId": "GTM-HMI8829",
+    "metaPixelId": "928172938472910",
+    "tiktokPixelId": "",
+    "enableInternalTracker": true
+  },
+  "summary": {
+    "totalVisitors": 1482,
+    "totalPageViews": 4922,
+    "totalWhatsAppClicks": 326,
+    "totalCartAdds": 512,
+    "estimatedRevenuePkr": 298400,
+    "conversionRate": 6.63,
+    "topProducts": [
+      {
+        "id": "hair-growth-oil",
+        "name": "Herbal Hair Growth Oil",
+        "views": 1240,
+        "cartAdds": 184,
+        "orders": 112,
+        "revenuePkr": 168000
+      },
+      {
+        "id": "kitchen-degreaser",
+        "name": "Kitchen Degreaser & Cleaner",
+        "views": 980,
+        "cartAdds": 142,
+        "orders": 86,
+        "revenuePkr": 60200
+      },
+      {
+        "id": "tooth-powder",
+        "name": "Herbal Tooth Powder",
+        "views": 740,
+        "cartAdds": 110,
+        "orders": 68,
+        "revenuePkr": 30600
+      },
+      {
+        "id": "herbal-shampoo",
+        "name": "Revitalizing Herbal Shampoo",
+        "views": 690,
+        "cartAdds": 94,
+        "orders": 54,
+        "revenuePkr": 48600
+      },
+      {
+        "id": "dishwash-liquid",
+        "name": "Natural Dishwash Liquid",
+        "views": 620,
+        "cartAdds": 82,
+        "orders": 46,
+        "revenuePkr": 20700
+      },
+      {
+        "id": "car-wash",
+        "name": "Concentrated Car Wash & Wax",
+        "views": 510,
+        "cartAdds": 65,
+        "orders": 38,
+        "revenuePkr": 26600
+      }
+    ],
+    "topPages": [
+      {
+        "path": "/",
+        "views": 2450
+      },
+      {
+        "path": "/personal-care",
+        "views": 1180
+      },
+      {
+        "path": "/home-care",
+        "views": 890
+      },
+      {
+        "path": "/contact",
+        "views": 280
+      },
+      {
+        "path": "/about",
+        "views": 120
+      }
+    ],
+    "dailyViews": [
+      {
+        "date": "Oct 25",
+        "views": 560,
+        "conversions": 38
+      },
+      {
+        "date": "Oct 26",
+        "views": 610,
+        "conversions": 42
+      },
+      {
+        "date": "Oct 27",
+        "views": 720,
+        "conversions": 49
+      },
+      {
+        "date": "Oct 28",
+        "views": 680,
+        "conversions": 44
+      },
+      {
+        "date": "Oct 29",
+        "views": 750,
+        "conversions": 51
+      },
+      {
+        "date": "Oct 30",
+        "views": 790,
+        "conversions": 53
+      },
+      {
+        "date": "Oct 31",
+        "views": 810,
+        "conversions": 59
+      }
+    ],
+    "channelBreakdown": [
+      {
+        "channel": "WhatsApp Shared Links",
+        "visitors": 652,
+        "percentage": 44
+      },
+      {
+        "channel": "Direct Traffic",
+        "visitors": 415,
+        "percentage": 28
+      },
+      {
+        "channel": "Google Organic Search",
+        "visitors": 282,
+        "percentage": 19
+      },
+      {
+        "channel": "Social Media (Insta/FB)",
+        "visitors": 133,
+        "percentage": 9
+      }
+    ],
+    "deviceBreakdown": [
+      {
+        "device": "mobile",
+        "count": 1185,
+        "percentage": 80
+      },
+      {
+        "device": "desktop",
+        "count": 252,
+        "percentage": 17
+      },
+      {
+        "device": "tablet",
+        "count": 45,
+        "percentage": 3
+      }
+    ],
+    "recentEvents": [
+      {
+        "id": "ev-mvzf0zm2-ob5v",
+        "type": "page_view",
+        "path": "/",
+        "valuePkr": 0,
+        "referrer": "https://aistudio.google.com/",
+        "timestamp": 1793633419082,
+        "city": "Karachi",
+        "device": "desktop"
+      },
+      {
+        "id": "ev-mvzejwep-uy0w",
+        "type": "page_view",
+        "path": "/",
+        "valuePkr": 0,
+        "referrer": "https://aistudio.google.com/",
+        "timestamp": 1793632621778,
+        "city": "Peshawar",
+        "device": "desktop"
+      },
+      {
+        "id": "ev-1",
+        "type": "whatsapp_click",
+        "path": "/personal-care",
+        "productId": "hair-growth-oil",
+        "productName": "Herbal Hair Growth Oil",
+        "valuePkr": 1500,
+        "timestamp": 1793631885991,
+        "city": "Karachi",
+        "device": "mobile"
+      },
+      {
+        "id": "ev-2",
+        "type": "cart_add",
+        "path": "/home-care",
+        "productId": "kitchen-degreaser",
+        "productName": "Kitchen Degreaser & Cleaner",
+        "valuePkr": 700,
+        "timestamp": 1793631105991,
+        "city": "Lahore",
+        "device": "mobile"
+      },
+      {
+        "id": "ev-3",
+        "type": "page_view",
+        "path": "/",
+        "timestamp": 1793630685991,
+        "city": "Islamabad",
+        "device": "desktop"
+      },
+      {
+        "id": "ev-4",
+        "type": "whatsapp_click",
+        "path": "/cart",
+        "valuePkr": 3200,
+        "timestamp": 1793629725991,
+        "city": "Rawalpindi",
+        "device": "mobile"
+      },
+      {
+        "id": "ev-5",
+        "type": "product_view",
+        "path": "/personal-care",
+        "productId": "tooth-powder",
+        "productName": "Herbal Tooth Powder",
+        "timestamp": 1793628705991,
+        "city": "Faisalabad",
+        "device": "mobile"
+      }
+    ]
+  }
+}
