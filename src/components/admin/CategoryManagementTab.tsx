@@ -37,7 +37,7 @@ export const CategoryManagementTab: React.FC<CategoryManagementTabProps> = ({
   onShowToast,
 }) => {
   // Products per page range state
-  const [rangeInput, setRangeInput] = useState<number>(settings?.productsPerPage || 6);
+  const [rangeInput, setRangeInput] = useState<number>(settings?.productsPerPage || 12);
   const [isSavingRange, setIsSavingRange] = useState(false);
 
   // Category Modal state
@@ -198,7 +198,7 @@ export const CategoryManagementTab: React.FC<CategoryManagementTabProps> = ({
         {/* Quick Range Presets */}
         <div className="pt-2 flex flex-wrap items-center gap-2 text-xs">
           <span className="text-[11px] font-medium text-slate-500">Quick Range Presets:</span>
-          {[4, 6, 8, 9, 12, 16].map((num) => (
+          {[4, 6, 8, 10, 12, 16].map((num) => (
             <button
               key={num}
               type="button"
@@ -218,7 +218,7 @@ export const CategoryManagementTab: React.FC<CategoryManagementTabProps> = ({
             </button>
           ))}
           <span className="text-[11px] text-[#2C5E43] font-medium ml-2">
-            ✓ Currently Active: <strong>{settings?.productsPerPage || 6} items per page</strong>
+            ✓ Currently Active: <strong>{settings?.productsPerPage || 12} items per page</strong>
           </span>
         </div>
       </div>

@@ -32,6 +32,7 @@ export interface BrandSettings {
   tagline: string;
   phone: string;
   phoneRaw: string;
+  landline?: string;
   email: string;
   whatsAppUrl: string;
   location: string;

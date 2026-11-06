@@ -5,6 +5,7 @@ import { DEFAULT_PAGES_CONTENT } from '../data/pagesContent';
 import {
   MessageCircle,
   Phone,
+  PhoneCall,
   Mail,
   MapPin,
   Clock,
@@ -33,6 +34,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({ settings, content }) =
   const activeWhatsApp = settings?.whatsAppUrl || BRAND_INFO.whatsAppUrl;
   const activePhone = settings?.phone || BRAND_INFO.phone;
   const activePhoneRaw = settings?.phoneRaw || BRAND_INFO.phoneRaw;
+  const activeLandline = settings?.landline || BRAND_INFO.landline || '0213-5643937';
   const activeEmail = settings?.email || BRAND_INFO.email;
   const activeDelivery = settings?.deliveryNotice || BRAND_INFO.deliveryNotice;
   const activeAddress = settings?.address || BRAND_INFO.address || 'C 65/29, 2nd Floor, Street 2, Punjab Colony, Karachi.';
@@ -261,6 +263,19 @@ export const ContactPage: React.FC<ContactPageProps> = ({ settings, content }) =
                     <a href={`tel:${activePhoneRaw}`} className="hover:text-[#1B4D2E] text-slate-600">
                       {activePhone}
                     </a>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3">
+                  <div className="p-2 bg-[#EEF5EF] text-[#2C5E43] rounded-lg shrink-0 mt-0.5">
+                    <PhoneCall className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <span className="font-semibold text-slate-900 block">PTCL Landline Helpline</span>
+                    <a href={`tel:${activeLandline.replace(/[^0-9]/g, '')}`} className="hover:text-[#1B4D2E] text-slate-600">
+                      {activeLandline}
+                    </a>
+                    <span className="text-[10px] text-slate-400 block">Karachi Office & Inquiries</span>
                   </div>
                 </div>
 

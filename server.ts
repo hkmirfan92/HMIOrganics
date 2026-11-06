@@ -947,6 +947,7 @@ app.put('/api/settings', requireSuperAdminAuth, (req, res) => {
       ...current,
       phone: req.body.phone !== undefined ? sanitizeString(req.body.phone) : current.phone,
       phoneRaw: cleanPhoneRaw || current.phoneRaw,
+      landline: req.body.landline !== undefined ? sanitizeString(req.body.landline) : current.landline,
       email: req.body.email !== undefined ? sanitizeString(req.body.email) : current.email,
       address: req.body.address !== undefined ? sanitizeString(req.body.address) : current.address,
       topBannerNotice: req.body.topBannerNotice !== undefined ? sanitizeString(req.body.topBannerNotice) : current.topBannerNotice,
@@ -954,7 +955,7 @@ app.put('/api/settings', requireSuperAdminAuth, (req, res) => {
       whatsAppUrl: cleanPhoneRaw ? `https://wa.me/${cleanPhoneRaw}` : current.whatsAppUrl,
       logoUrl: req.body.logoUrl !== undefined ? sanitizeString(req.body.logoUrl) : current.logoUrl,
       faviconUrl: req.body.faviconUrl !== undefined ? sanitizeString(req.body.faviconUrl) : current.faviconUrl,
-      productsPerPage: req.body.productsPerPage !== undefined ? Math.max(1, Math.min(100, Number(req.body.productsPerPage) || 6)) : (current.productsPerPage || 6),
+      productsPerPage: req.body.productsPerPage !== undefined ? Math.max(1, Math.min(100, Number(req.body.productsPerPage) || 12)) : (current.productsPerPage || 12),
     };
 
     writeSettings(updated);

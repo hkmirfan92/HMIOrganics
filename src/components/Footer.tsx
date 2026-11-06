@@ -2,7 +2,7 @@ import React from 'react';
 import { PageId, BrandSettings, GlobalSiteContent } from '../types';
 import { BrandLogo } from './BrandLogo';
 import { BRAND_INFO } from '../data/products';
-import { MessageCircle, Phone, Mail, MapPin, Heart, ShieldCheck, Sparkles, Leaf } from 'lucide-react';
+import { MessageCircle, Phone, PhoneCall, Mail, MapPin, Heart, ShieldCheck, Sparkles, Leaf } from 'lucide-react';
 
 interface FooterProps {
   onNavigate: (page: PageId) => void;
@@ -20,6 +20,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, settings, content })
   const activeWhatsApp = settings?.whatsAppUrl || BRAND_INFO.whatsAppUrl;
   const activePhone = settings?.phone || BRAND_INFO.phone;
   const activePhoneRaw = settings?.phoneRaw || BRAND_INFO.phoneRaw;
+  const activeLandline = settings?.landline || BRAND_INFO.landline || '0213-5643937';
   const activeEmail = settings?.email || BRAND_INFO.email;
   const activeDelivery = settings?.deliveryNotice || BRAND_INFO.deliveryNotice;
   const activeAddress = settings?.address || BRAND_INFO.address || 'C 65/29, 2nd Floor, Street 2, Punjab Colony, Karachi.';
@@ -172,6 +173,14 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, settings, content })
               >
                 <Phone className="w-4 h-4 text-[#7BD490]" />
                 <span>{activePhone}</span>
+              </a>
+              <a
+                href={`tel:${activeLandline.replace(/[^0-9]/g, '')}`}
+                className="flex items-center gap-2 hover:text-white transition-colors"
+                title="Office Landline"
+              >
+                <PhoneCall className="w-4 h-4 text-[#7BD490]" />
+                <span>Tel: {activeLandline}</span>
               </a>
               <a
                 href={`mailto:${activeEmail}`}

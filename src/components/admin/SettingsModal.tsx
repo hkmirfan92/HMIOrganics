@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BrandSettings } from '../../types';
-import { X, Save, MessageCircle, Phone, Mail, MapPin, Bell, HardDriveDownload, SlidersHorizontal } from 'lucide-react';
+import { X, Save, MessageCircle, Phone, PhoneCall, Mail, MapPin, Bell, HardDriveDownload, SlidersHorizontal } from 'lucide-react';
 
 interface SettingsModalProps {
   isOpen: boolean;
@@ -17,20 +17,22 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
 }) => {
   const [phone, setPhone] = useState('');
   const [phoneRaw, setPhoneRaw] = useState('');
+  const [landline, setLandline] = useState('');
   const [email, setEmail] = useState('');
   const [topBannerNotice, setTopBannerNotice] = useState('');
   const [deliveryNotice, setDeliveryNotice] = useState('');
   const [address, setAddress] = useState('');
-  const [productsPerPage, setProductsPerPage] = useState<number>(6);
+  const [productsPerPage, setProductsPerPage] = useState<number>(12);
   const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
     if (settings) {
       setPhone(settings.phone || '+92 305 2211093');
       setPhoneRaw(settings.phoneRaw || '923052211093');
+      setLandline(settings.landline || '0213-5643937');
       setEmail(settings.email || 'hmiorganicspk@gmail.com');
       setAddress(settings.address || 'C 65/29, 2nd Floor, Street 2, Punjab Colony, Karachi.');
-      setProductsPerPage(settings.productsPerPage || 6);
+      setProductsPerPage(settings.productsPerPage || 12);
       setTopBannerNotice(
         settings.topBannerNotice ||
           '🌿 Handcrafted Pure Herbal & Eco-Friendly Care · Fast Delivery Across All Cities in Pakistan'
@@ -52,9 +54,10 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
       await onSaveSettings({
         phone: phone.trim(),
         phoneRaw: cleanRaw,
+        landline: landline.trim(),
         email: email.trim(),
         address: address.trim(),
-        productsPerPage: Math.max(1, Math.min(60, Number(productsPerPage) || 6)),
+        productsPerPage: Math.max(1, Math.min(60, Number(productsPerPage) || 12)),
         topBannerNotice: topBannerNotice.trim(),
         deliveryNotice: deliveryNotice.trim(),
         whatsAppUrl: `https://wa.me/${cleanRaw}`,
@@ -103,6 +106,22 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
               placeholder="+92 305 2211093"
               className="w-full text-xs px-3.5 py-2.5 bg-[#FAFDFB] border border-[#CCDCD0] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2C5E43]"
             />
+          </div>
+
+          <div>
+            <label className="block font-semibold text-slate-700 mb-1 flex items-center gap-1.5">
+              <PhoneCall className="w-3.5 h-3.5 text-[#2C5E43]" /> Official Landline Number
+            </label>
+            <input
+              type="text"
+              value={landline}
+              onChange={(e) => setLandline(e.target.value)}
+              placeholder="0213-5643937"
+              className="w-full text-xs px-3.5 py-2.5 bg-[#FAFDFB] border border-[#CCDCD0] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2C5E43]"
+            />
+            <span className="text-[10px] text-slate-400 mt-1 block">
+              Karachi PTCL / Office Helpline (e.g. 0213-5643937)
+            </span>
           </div>
 
           <div>

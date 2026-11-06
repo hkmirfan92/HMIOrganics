@@ -276,13 +276,15 @@ export const BRAND_INFO = {
   tagline: 'Pure, Natural & Trusted Care for Home and Body',
   phone: '+92 305 2211093',
   phoneRaw: '923052211093',
+  landline: '0213-5643937',
   email: 'hmiorganicspk@gmail.com',
   whatsAppUrl: 'https://wa.me/923052211093',
   location: 'Karachi, Pakistan (Nationwide Delivery)',
   address: 'C 65/29, 2nd Floor, Street 2, Punjab Colony, Karachi.',
   deliveryNotice: 'Delivering across Karachi, Lahore, Islamabad, Faisalabad, Peshawar, and all of Pakistan',
   logoUrl: '/assets/aistudio/IMG-20261007-WA0000-Photoroom_407330cc.png',
-  faviconUrl: '/favicon.png'
+  faviconUrl: '/favicon.png',
+  productsPerPage: 12
 };
 
 export const TRUST_BADGES = [

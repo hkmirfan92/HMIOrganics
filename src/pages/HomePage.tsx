@@ -63,8 +63,8 @@ export const HomePage: React.FC<HomePageProps> = ({
     }
   }, [selectedCategoryFilter]);
 
-  // Configurable Products Per Page range set by admin (defaults to 6)
-  const itemsPerPage = Math.max(1, settings?.productsPerPage || 6);
+  // Configurable Products Per Page range set by admin (defaults to 12)
+  const itemsPerPage = Math.max(1, settings?.productsPerPage || 12);
 
   // Default categories fallback
   const storeCategories: Category[] = categories.length > 0

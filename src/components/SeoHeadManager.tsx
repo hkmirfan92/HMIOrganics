@@ -170,7 +170,7 @@ export const SeoHeadManager: React.FC<SeoHeadManagerProps> = ({
           url: seoSettings.canonicalBaseUrl,
           logo: activeOrgLogo,
           description: seoSettings.siteDescription,
-          telephone: settings?.phone || '+923052211093',
+          telephone: [settings?.phone || '+923052211093', settings?.landline || '0213-5643937'],
           priceRange: 'PKR 250 - PKR 1800',
           address: {
             '@type': 'PostalAddress',
