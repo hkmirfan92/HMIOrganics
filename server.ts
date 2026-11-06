@@ -10,13 +10,21 @@ import { DEFAULT_SEO_SETTINGS, DEFAULT_ANALYTICS_SETTINGS, DEFAULT_ANALYTICS_SUM
 const app = express();
 
 function getPort(): number {
+  // In production (Cloud Run deployment), always honor process.env.PORT (typically 8080)
+  if (process.env.NODE_ENV === 'production') {
+    const prodPort = parseInt(process.env.PORT || '8080', 10);
+    if (!isNaN(prodPort) && prodPort > 0) return prodPort;
+    return 8080;
+  }
+
   const portIndex = process.argv.indexOf('--port');
   if (portIndex !== -1 && process.argv[portIndex + 1]) {
     const parsed = parseInt(process.argv[portIndex + 1], 10);
     if (!isNaN(parsed) && parsed > 0) return parsed;
   }
-  // In the container sandbox, process.env.PORT is 8080 (reserved for proxy).
-  // The applet dev server must run on port 3000.
+
+  // In the dev container sandbox, ambient PORT=8080 is reserved for internal proxy.
+  // The dev server must run on port 3000.
   if (process.env.PORT && process.env.PORT !== '8080') {
     const parsed = parseInt(process.env.PORT, 10);
     if (!isNaN(parsed) && parsed > 0) return parsed;
@@ -1373,8 +1381,19 @@ async function setupVite() {
     });
   }
 
-  app.listen(PORT, '0.0.0.0', () => {
+  const server = app.listen(PORT, '0.0.0.0', () => {
     console.log(`HMI Organics Secured Server running on http://0.0.0.0:${PORT}`);
+  });
+
+  server.on('error', (err: any) => {
+    if (err.code === 'EADDRINUSE') {
+      console.warn(`Port ${PORT} in use, attempting fallback to port 3000...`);
+      app.listen(3000, '0.0.0.0', () => {
+        console.log(`HMI Organics Secured Server running on fallback http://0.0.0.0:3000`);
+      });
+    } else {
+      console.error('Server listen error:', err);
+    }
   });
 }
 

@@ -1,4 +1,4 @@
-import { SiteSeoSettings, AnalyticsSettings, AnalyticsSummary } from '../types';
+import type { SiteSeoSettings, AnalyticsSettings, AnalyticsSummary } from '../types/index.ts';
 
 export const DEFAULT_SEO_SETTINGS: SiteSeoSettings = {
   siteTitle: 'HMI Organics — Pure Herbal Care & Eco-Friendly Home Products',

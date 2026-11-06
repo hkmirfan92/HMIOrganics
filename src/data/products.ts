@@ -1,4 +1,4 @@
-import { Product } from '../types';
+import type { Product } from '../types/index.ts';
 
 export const PERSONAL_CARE_PRODUCTS: Product[] = [
   {

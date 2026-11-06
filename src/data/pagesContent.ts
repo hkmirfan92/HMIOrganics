@@ -1,4 +1,4 @@
-import { SitePagesContent } from '../types';
+import type { SitePagesContent } from '../types/index.ts';
 
 export const DEFAULT_PAGES_CONTENT: SitePagesContent = {
   home: {
