@@ -65,6 +65,17 @@ export const ProductQuickViewModal: React.FC<ProductQuickViewModalProps> = ({
         {/* Content */}
         <div className="p-6 overflow-y-auto flex-1 space-y-6 text-sm">
           
+          {/* Product Image Preview */}
+          {product.imageUrl && (
+            <div className="w-full h-52 sm:h-60 bg-gradient-to-b from-[#F7FAF7] to-[#EEF5F0] rounded-2xl border border-[#E3ECE5] flex items-center justify-center p-4 overflow-hidden">
+              <img
+                src={product.imageUrl}
+                alt={product.name}
+                className="max-h-full max-w-full object-contain drop-shadow-md hover:scale-105 transition-transform duration-300"
+              />
+            </div>
+          )}
+
           {/* Main Description */}
           <div>
             <h4 className="text-xs font-bold uppercase tracking-wider text-[#2C5E43] mb-1.5 flex items-center gap-1.5">

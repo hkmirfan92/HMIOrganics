@@ -3,53 +3,77 @@ import type { Product } from '../types/index.ts';
 export const PERSONAL_CARE_PRODUCTS: Product[] = [
   {
     id: 'tooth-powder',
-    name: 'Herbal Tooth Powder',
+    name: 'Herbal Tooth Powder (Herbal Red)',
     category: 'personal-care',
     subCategory: 'Oral Care',
-    tagline: 'Ancient Dental Care with Clove & Rock Salt',
-    description: 'A traditional and effective fluoride-free oral powder crafted with pure clove oil, babool bark, calcium carbonate, and cooling peppermint to whiten enamel and strengthen gums naturally.',
-    volumeOrWeight: '60g Jar',
+    tagline: 'Clean Teeth, Fresh Breath & Gum Hygiene',
+    description: 'A traditional fluoride-free herbal tooth powder formulated with pure clove oil, babool bark, calcium carbonate, and cooling herbs to whiten enamel, fight surface stains, and strengthen gums naturally.',
+    volumeOrWeight: '60g Bottle',
     pricePkr: 450,
+    imageUrl: '/assets/aistudio/tpr_ca805b47.jpeg',
     keyIngredients: ['Clove Oil', 'Babool (Acacia) Bark', 'Peppermint Essential Oil', 'Calcium Carbonate', 'Himalayan Rock Salt'],
     benefits: [
       'Relieves tooth sensitivity and gum bleeding',
       'Removes tea, coffee, and tobacco stains naturally',
       'Long-lasting fresh herbal breath',
-      '100% chemical and microplastic free'
+      '100% chemical, fluoride, and microplastic free'
     ],
     howToUse: 'Dampen your toothbrush or clean fingertip, dab a small amount of powder, massage teeth and gum lines gently for 2 minutes, then rinse clean.',
     isBestseller: true,
-    ecoHighlights: ['Zero Microplastics', 'Fluoride-Free', 'Reusable Glass Jar', 'Cruelty-Free']
+    ecoHighlights: ['Zero Microplastics', 'Fluoride-Free', 'Recyclable Container', 'Cruelty-Free']
+  },
+  {
+    id: 'tooth-powder-cool-shine',
+    name: 'Tooth Powder Cool n Shine (Blue Mint)',
+    category: 'personal-care',
+    subCategory: 'Oral Care',
+    tagline: 'Minty Feel, Clean Teeth & Total Oral Hygiene',
+    description: 'An invigorating minty tooth powder designed for long-lasting fresh breath, plaque defense, and sparkling clean teeth. Enriched with natural peppermint and gentle mineral polishers.',
+    volumeOrWeight: '60g Bottle',
+    pricePkr: 450,
+    imageUrl: '/assets/aistudio/tpb_a46c6d08.jpeg',
+    keyIngredients: ['Cooling Peppermint', 'Menthol Crystal', 'Calcium Carbonate', 'Baking Soda Mineral', 'Clove Essence'],
+    benefits: [
+      'Cool minty feel that keeps breath fresh all day',
+      'Cleans teeth thoroughly and lifts stubborn surface stains',
+      'Supports healthy pink gums and overall oral hygiene',
+      'Fluoride-free and gentle on enamel'
+    ],
+    howToUse: 'Dampen your toothbrush, dip slightly into powder, brush gently for 2 minutes, then rinse clean with water.',
+    isBestseller: true,
+    ecoHighlights: ['Fluoride-Free', 'Mint Freshness', 'Gentle Enamel Polish', 'Cruelty-Free']
   },
   {
     id: 'hair-growth-oil',
     name: 'Pure Herbal Hair Growth Oil',
     category: 'personal-care',
     subCategory: 'Hair Care',
-    tagline: 'Deep Follicle Nourishment from Root to Tip',
+    tagline: 'Promotes Hair Growth, Nourishes Roots & Reduces Hair Fall',
     description: 'A therapeutic cold-pressed blend steeped with Bhringraj, Rosemary oil, Amla, Almond oil, and Black Seed (Kalonji) to stimulate dormant follicles, halt premature hair fall, and restore thick, lustrous shine.',
-    volumeOrWeight: '120ml Amber Glass Dropper',
+    volumeOrWeight: '100ml Bottle',
     pricePkr: 950,
+    imageUrl: '/assets/aistudio/Oil_57d96583.jpeg',
     keyIngredients: ['Rosemary Essential Oil', 'Cold-Pressed Castor Oil', 'Bhringraj Extract', 'Amla', 'Pure Almond Oil', 'Black Seed (Kalonji)'],
     benefits: [
-      'Visibly reduces hair fall within 3 weeks of regular use',
+      'Visibly reduces hair fall within regular use',
       'Stimulates new baby hair growth and thickens density',
       'Soothes dry, flaky scalp and dandruff',
       'Deeply conditions rough and split ends'
     ],
-    howToUse: 'Section dry hair and use the dropper to apply directly to the scalp. Massage with fingertips in circular motions for 5–10 minutes. Leave for 2 hours or overnight, then wash with HMI Herbal Shampoo.',
+    howToUse: 'Section dry hair and apply directly to the scalp. Massage with fingertips in circular motions for 5–10 minutes. Leave for 2 hours or overnight, then wash with HMI Herbal Shampoo.',
     isBestseller: true,
-    ecoHighlights: ['100% Pure Cold-Pressed', 'No Mineral Oil', 'No Synthetic Silicones', 'Recyclable Glass']
+    ecoHighlights: ['100% Pure Cold-Pressed', 'No Mineral Oil', 'No Synthetic Silicones', 'Recyclable Packaging']
   },
   {
     id: 'herbal-shampoo',
     name: 'Nourishing Herbal Shampoo',
     category: 'personal-care',
     subCategory: 'Hair Care',
-    tagline: 'Sulfate-Free Scalp Cleanser & Shine Restorer',
+    tagline: 'Gently Cleanses Hair & Removes Excess Oil & Dirt',
     description: 'Formulated with traditional Reetha (soapnut) and Shikakai for a mild, rich botanical lather. Infused with soothing Aloe Vera and botanical extracts to clean buildup without stripping natural lipids.',
-    volumeOrWeight: '300ml Eco Bottle',
+    volumeOrWeight: '200ml Bottle',
     pricePkr: 750,
+    imageUrl: '/assets/aistudio/Shampoo_3e5639b6.jpeg',
     keyIngredients: ['Reetha (Soapnut) Glucoside', 'Shikakai Extract', 'Aloe Vera Leaf Gel', 'Nettle Leaf', 'Wild Mint Oil'],
     benefits: [
       'Gentle everyday scalp cleansing that balances natural sebum',
@@ -58,18 +82,19 @@ export const PERSONAL_CARE_PRODUCTS: Product[] = [
       'Safe for color-treated and keratin-treated hair'
     ],
     howToUse: 'Wet hair thoroughly, apply a coin-sized amount into palms, work into scalp with gentle massage until natural herbal foam forms, then rinse clean with water.',
-    isBestseller: false,
+    isBestseller: true,
     ecoHighlights: ['Sulfate & Paraben Free', 'Plant-Derived Surfactants', 'Biodegradable Rinse', 'Color Safe']
   },
   {
     id: 'glycerin-soap',
-    name: 'Handcrafted Glycerin Soap',
+    name: 'Pure Handcrafted Glycerin Soap Base / Bar',
     category: 'personal-care',
     subCategory: 'Skin Care',
-    tagline: 'Moisture-Rich Botanical Cleansing Bar',
+    tagline: '100% Pure Vegetable Glycerin & Deep Skin Hydration',
     description: 'Slow-crafted artisan bath bar made with 100% vegetable glycerin, soothing lavender oil, and colloidal oat milk. Maintains your skin moisture barrier with a rich, creamy lather.',
-    volumeOrWeight: '110g Hand-cut Bar',
+    volumeOrWeight: 'Handcrafted Bar / Blocks',
     pricePkr: 380,
+    imageUrl: '/assets/aistudio/glycerin_soap_0cfeb2d5.jpg',
     keyIngredients: ['100% Pure Vegetable Glycerin', 'French Lavender Oil', 'Colloidal Oat Extract', 'Cold-Pressed Coconut Oil', 'Vitamin E'],
     benefits: [
       'Ultra-hydrating formula prevents post-shower tightness',
@@ -83,18 +108,19 @@ export const PERSONAL_CARE_PRODUCTS: Product[] = [
   },
   {
     id: 'herbal-handwash',
-    name: 'Herbal Foaming Handwash',
+    name: 'Rose Hand Wash (With Rose Extract)',
     category: 'personal-care',
     subCategory: 'Skin Care',
-    tagline: 'Botanical Antibacterial Defense with Tea Tree',
-    description: 'A comforting, skin-softening handwash formulated with natural antimicrobial tea tree oil, neem extract, and fresh lemon peel to cleanse thoroughly while keeping hands soft throughout frequent daily washes.',
-    volumeOrWeight: '300ml Pump Bottle',
-    pricePkr: 420,
-    keyIngredients: ['Tea Tree Essential Oil', 'Neem Leaf Extract', 'Lemon Peel Essence', 'Vegetable Glycerin', 'Aloe Vera Juice'],
+    tagline: 'Gentle Cleansing & Soft Hands with Natural Rose Extract',
+    description: 'A comforting, skin-softening handwash formulated with natural rose extract, botanical glycerin, and pure floral water to cleanse thoroughly while keeping hands soft throughout frequent daily washes.',
+    volumeOrWeight: '500ml Pump Bottle',
+    pricePkr: 450,
+    imageUrl: '/assets/aistudio/Handwash_ccc913f8.jpeg',
+    keyIngredients: ['Pure Rose Extract', 'Vegetable Glycerin', 'Aloe Vera Juice', 'Mild Coconut Cleansers'],
     benefits: [
       'Naturally eliminates 99.9% common household germs',
-      'No drying alcohols or harsh synthetic triclosan',
-      'Leaves hands lightly scented with fresh crisp lemon & herbs',
+      'Gentle cleansing that leaves hands velvety soft',
+      'Leaves hands lightly scented with fresh damask roses',
       'Gentle on kids and delicate hands'
     ],
     howToUse: 'Dispense one pump onto wet hands. Lather between fingers, palms, and backs of hands for at least 20 seconds. Rinse cleanly with water.',
@@ -106,16 +132,17 @@ export const PERSONAL_CARE_PRODUCTS: Product[] = [
 export const HOME_CARE_PRODUCTS: Product[] = [
   {
     id: 'dishwash-liquid',
-    name: 'Plant-Powered Dishwash Liquid',
+    name: 'Lemon Dishwash Liquid',
     category: 'home-care',
     subCategory: 'Kitchen Care',
-    tagline: 'Cuts Tough Grease, Safe on Hands & Dishes',
+    tagline: 'Super Grease Removal & Sparkling Clean (Rs. 150)',
     description: 'An eco-friendly dishwashing concentrate powered by citrus bio-enzymes and coconut glucosides. Dissolves stubborn biryani oils, baked curries, and grease without leaving toxic synthetic film on utensils.',
     volumeOrWeight: '500ml Bottle',
-    pricePkr: 480,
+    pricePkr: 150,
+    imageUrl: '/assets/aistudio/Lemon_Dish_Wash_c7a3a938.jpeg',
     keyIngredients: ['Citrus Bio-Enzymes', 'Coconut Glucoside', 'Lemon Oil', 'Aloe Vera Extract', 'Citric Acid'],
     benefits: [
-      'Dissolves tough baked-on oil and stubborn grease effortlessly',
+      'Super grease removal on stubborn pots and greasy dishes',
       'Rinses completely clean without any chemical residue on dinnerware',
       'Infused with aloe vera to keep hands soft during sink duty',
       'Non-toxic greywater runoff safe for garden watering'
@@ -133,6 +160,7 @@ export const HOME_CARE_PRODUCTS: Product[] = [
     description: 'A professional-grade, biodegradable automotive shampoo formulated to encapsulate grit, dirt, and road film safely without stripping wax, ceramic coatings, or protective sealants.',
     volumeOrWeight: '1 Liter Eco Bottle',
     pricePkr: 850,
+    imageUrl: '/assets/products/car-wash.jpg',
     keyIngredients: ['Biodegradable Coconut Surfactants', 'Carnauba Wax Emulsion', 'Water Softening Minerals', 'Lime Citrus Peel'],
     benefits: [
       'High-foaming slick lather prevents swirl marks and scratches',
@@ -153,6 +181,7 @@ export const HOME_CARE_PRODUCTS: Product[] = [
     description: 'Heavy-duty plant enzyme degreasing spray designed for heavy Pakistani kitchen cooking residue. Melts sticky oil films on stovetops, exhaust chimneys, microwave ovens, air fryers, and backsplash tiles.',
     volumeOrWeight: '500ml Trigger Spray',
     pricePkr: 550,
+    imageUrl: '/assets/products/kitchen-degreaser.jpg',
     keyIngredients: ['Natural Orange Terpenes (d-Limonene)', 'Plant-Based Degreasing Surfactants', 'Sodium Carbonate', 'Purified Water'],
     benefits: [
       'Dissolves hardened sticky cooking grease in under 3 minutes',
@@ -173,6 +202,7 @@ export const HOME_CARE_PRODUCTS: Product[] = [
     description: 'Ammonia-free glass cleaner made with grain alcohol and botanical vinegar essence. Leaves windows, mirrors, glass tables, and car windscreens crystal clear with a dust-repellent sheen.',
     volumeOrWeight: '500ml Trigger Spray',
     pricePkr: 420,
+    imageUrl: '/assets/products/glass-cleaner.jpg',
     keyIngredients: ['Grain Bio-Alcohol', 'Fermented Vinegar Essence', 'Purified Reverse Osmosis Water', 'Peppermint Oil'],
     benefits: [
       'Zero streaks, haze, or cloudy residues',
@@ -193,6 +223,7 @@ export const HOME_CARE_PRODUCTS: Product[] = [
     description: 'An everyday versatile surface cleaner for dining tables, study desks, kitchen islands, laptop keyboards, and countertops. Neutralizes bacteria and sticky fingerprints with zero sticky residues.',
     volumeOrWeight: '500ml Trigger Spray',
     pricePkr: 460,
+    imageUrl: '/assets/products/table-cleaner.jpg',
     keyIngredients: ['Eucalyptus Essential Oil', 'Thyme Herb Essence', 'Mild Plant Glucosides', 'Deionized Water'],
     benefits: [
       'Instantly lifts grease, food splatters, and finger smudges',
@@ -213,6 +244,7 @@ export const HOME_CARE_PRODUCTS: Product[] = [
     description: 'A dual-purpose rich conditioning cream crafted with natural beeswax and Brazilian carnauba. Feeds dry wood furniture to prevent cracking and restores deep hydrophobic gloss to car dashboards and exterior body panels.',
     volumeOrWeight: '250g Conditioning Cream',
     pricePkr: 890,
+    imageUrl: '/assets/products/furniture-polish.jpg',
     keyIngredients: ['Pure Natural Beeswax', 'Refined Carnauba Wax', 'Cold-Pressed Linseed Oil', 'Citrus Solvent'],
     benefits: [
       'Revives tired wooden furniture, concealing minor micro-scratches',
@@ -233,6 +265,7 @@ export const HOME_CARE_PRODUCTS: Product[] = [
     description: 'A safe, non-corrosive alternative to harsh synthetic phenyls. Blended with real alpine pine oil and insect-deterring citronella to eliminate bacteria, deter ants and flies, and impart a clean garden scent.',
     volumeOrWeight: '1 Liter Concentrated Bottle',
     pricePkr: 490,
+    imageUrl: '/assets/products/floor-cleaner.jpg',
     keyIngredients: ['Pure Pine Essential Oil', 'Ceylon Citronella Oil', 'Neem Leaf Extract', 'Botanical Surfactants'],
     benefits: [
       'Disinfects marble, tile, ceramic, and hardwood floors safely',
@@ -253,6 +286,7 @@ export const HOME_CARE_PRODUCTS: Product[] = [
     description: 'A gentle yet formidable laundry solution containing oxygen-based stain lifters and natural washing minerals, paired with a bottle of classic Robin Blue Neel fabric brightener for timeless crisp white kurtas, shirts, and bed linens.',
     volumeOrWeight: '1kg Eco Box + 100ml Liquid Neel',
     pricePkr: 580,
+    imageUrl: '/assets/products/laundry-powder.jpg',
     keyIngredients: ['Natural Washing Soda', 'Oxygen Bio-Enzymes', 'Pure Vegetable Soap Flakes', 'Ultramarine Blue Mineral Neel', 'Lavender Essence'],
     benefits: [
       'Removes stubborn dirt from cuffs, collars, and kids clothes',

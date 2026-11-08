@@ -162,17 +162,42 @@ export const api = {
       const snapshot = await getDocs(colRef);
 
       if (!snapshot.empty) {
-        const productsList: Product[] = [];
+        const productsMap = new Map<string, Product>();
+        let needsSync = false;
+
         snapshot.forEach((docSnap) => {
           const raw = docSnap.data();
-          productsList.push(normalizeProduct({ ...raw, id: docSnap.id }));
+          const normalized = normalizeProduct({ ...raw, id: docSnap.id });
+          const official = ALL_PRODUCTS.find((p) => p.id === docSnap.id);
+          // If the product in Firestore lacks an image or has empty imageUrl, enrich with official photo
+          if (official && (!normalized.imageUrl || normalized.imageUrl.trim() === '')) {
+            normalized.imageUrl = official.imageUrl;
+            needsSync = true;
+          }
+          productsMap.set(docSnap.id, normalized);
         });
+
+        // Ensure all official products (including new products) exist
+        for (const official of ALL_PRODUCTS) {
+          if (!productsMap.has(official.id)) {
+            productsMap.set(official.id, normalizeProduct(official));
+            needsSync = true;
+          }
+        }
+
+        const productsList = Array.from(productsMap.values());
         localStorage.setItem(LOCAL_STORAGE_PRODUCTS_KEY, JSON.stringify(productsList));
+
+        // Background sync to persist missing images or new products in Firestore
+        if (needsSync) {
+          this.syncOfficialProductsWithFirestore(productsList).catch(() => {});
+        }
+
         return productsList;
       }
 
       // If Firestore is empty (initial deployment), auto-seed Firestore with default products
-      this.seedInitialProducts().catch((e) => console.warn('Could not auto-seed Firestore products:', e));
+      await this.seedInitialProducts();
     } catch (e) {
       console.warn('Firestore fetch failed, checking local cache:', e);
     }
@@ -196,13 +221,31 @@ export const api = {
       const batch = writeBatch(db);
       for (const prod of ALL_PRODUCTS) {
         const docRef = doc(db, 'products', prod.id);
-        batch.set(docRef, prod);
+        batch.set(docRef, normalizeProduct(prod));
       }
       await batch.commit();
       console.log('Seeded initial products to Firestore successfully');
-    } catch {
-      // Ignored if permissions not yet granted
+    } catch (e) {
+      console.warn('Could not seed initial products to Firestore:', e);
     }
+  },
+
+  // Sync official catalog images and details to Firestore
+  async syncOfficialProductsWithFirestore(productsToSync?: Product[]): Promise<Product[]> {
+    const targetProducts = productsToSync || ALL_PRODUCTS;
+    try {
+      const batch = writeBatch(db);
+      for (const prod of targetProducts) {
+        const docRef = doc(db, 'products', prod.id);
+        batch.set(docRef, normalizeProduct(prod), { merge: true });
+      }
+      await batch.commit();
+      console.log('Synced products & images to Firestore successfully');
+    } catch (e) {
+      console.warn('Could not sync products to Firestore:', e);
+    }
+    localStorage.setItem(LOCAL_STORAGE_PRODUCTS_KEY, JSON.stringify(targetProducts));
+    return targetProducts;
   },
 
   // Public GET: Fetch all categories
