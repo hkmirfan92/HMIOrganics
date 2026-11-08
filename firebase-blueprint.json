@@ -1,0 +1,130 @@
+{
+  "entities": {
+    "Product": {
+      "title": "Product",
+      "description": "Store product in the catalog",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "category": { "type": "string" },
+        "subCategory": { "type": "string" },
+        "tagline": { "type": "string" },
+        "description": { "type": "string" },
+        "volumeOrWeight": { "type": "string" },
+        "pricePkr": { "type": "number" },
+        "keyIngredients": { "type": "array" },
+        "benefits": { "type": "array" },
+        "howToUse": { "type": "string" },
+        "isBestseller": { "type": "boolean" },
+        "isVisible": { "type": "boolean" },
+        "ecoHighlights": { "type": "array" },
+        "customEmoji": { "type": "string" },
+        "imageUrl": { "type": "string" }
+      },
+      "required": ["id", "name", "category", "pricePkr"]
+    },
+    "Category": {
+      "title": "Category",
+      "description": "Store product categories",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "icon": { "type": "string" },
+        "displayOrder": { "type": "number" }
+      },
+      "required": ["id", "name"]
+    },
+    "BrandSettings": {
+      "title": "BrandSettings",
+      "description": "Store brand coordinates and contact info",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "tagline": { "type": "string" },
+        "phone": { "type": "string" },
+        "phoneRaw": { "type": "string" },
+        "landline": { "type": "string" },
+        "email": { "type": "string" },
+        "whatsAppUrl": { "type": "string" },
+        "location": { "type": "string" },
+        "address": { "type": "string" },
+        "deliveryNotice": { "type": "string" },
+        "topBannerNotice": { "type": "string" },
+        "logoUrl": { "type": "string" },
+        "faviconUrl": { "type": "string" },
+        "productsPerPage": { "type": "number" }
+      }
+    },
+    "SitePagesContent": {
+      "title": "SitePagesContent",
+      "description": "Website page content and banners",
+      "type": "object",
+      "properties": {
+        "home": { "type": "object" },
+        "personalCare": { "type": "object" },
+        "homeCare": { "type": "object" },
+        "about": { "type": "object" },
+        "contact": { "type": "object" },
+        "global": { "type": "object" }
+      }
+    },
+    "SiteSeoSettings": {
+      "title": "SiteSeoSettings",
+      "description": "SEO and schema tags",
+      "type": "object",
+      "properties": {
+        "siteTitle": { "type": "string" },
+        "siteDescription": { "type": "string" },
+        "keywords": { "type": "string" },
+        "canonicalBaseUrl": { "type": "string" },
+        "ogSiteName": { "type": "string" },
+        "ogImageUrl": { "type": "string" },
+        "twitterHandle": { "type": "string" },
+        "googleVerificationCode": { "type": "string" },
+        "bingVerificationCode": { "type": "string" },
+        "enableJsonLd": { "type": "boolean" },
+        "organizationName": { "type": "string" },
+        "organizationLogo": { "type": "string" }
+      }
+    },
+    "AdminRecord": {
+      "title": "AdminRecord",
+      "description": "Super admin and authorized store managers",
+      "type": "object",
+      "properties": {
+        "email": { "type": "string" },
+        "role": { "type": "string" }
+      },
+      "required": ["email", "role"]
+    }
+  },
+  "firestore": {
+    "/products/{productId}": {
+      "schema": "Product",
+      "description": "Store products catalog"
+    },
+    "/categories/{categoryId}": {
+      "schema": "Category",
+      "description": "Product categories"
+    },
+    "/settings/{settingId}": {
+      "schema": "BrandSettings",
+      "description": "Store brand settings and configuration"
+    },
+    "/pages/{pageId}": {
+      "schema": "SitePagesContent",
+      "description": "Page text and banner contents"
+    },
+    "/seo/{seoId}": {
+      "schema": "SiteSeoSettings",
+      "description": "SEO meta tags and configuration"
+    },
+    "/admins/{adminId}": {
+      "schema": "AdminRecord",
+      "description": "Authorized admin users"
+    }
+  }
+}

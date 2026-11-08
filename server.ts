@@ -679,8 +679,8 @@ app.post('/api/auth/change-password', requireAdminAuth, (req, res) => {
       return res.status(400).json({ success: false, message: 'Current password is incorrect' });
     }
 
-    if (!newPassword || typeof newPassword !== 'string' || newPassword.length < 6) {
-      return res.status(400).json({ success: false, message: 'New password must be at least 6 characters long' });
+    if (!newPassword || typeof newPassword !== 'string' || newPassword.length < 4) {
+      return res.status(400).json({ success: false, message: 'New password must be at least 4 characters long' });
     }
 
     const newHashed = hashPassword(newPassword);
