@@ -81,7 +81,7 @@ export const ProductQuickViewModal: React.FC<ProductQuickViewModalProps> = ({
               <Sparkles className="w-4 h-4" /> Key Benefits
             </h4>
             <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-              {product.benefits.map((benefit, i) => (
+              {(product.benefits || ['Safe, pure & eco-friendly formulation']).map((benefit, i) => (
                 <li key={i} className="flex items-start gap-2 text-xs text-slate-700 bg-[#F7FAF7] p-2.5 rounded-xl border border-[#E4ECE5]">
                   <Check className="w-3.5 h-3.5 text-[#2C5E43] shrink-0 mt-0.5" />
                   <span>{benefit}</span>
@@ -96,7 +96,7 @@ export const ProductQuickViewModal: React.FC<ProductQuickViewModalProps> = ({
               <Shield className="w-4 h-4" /> Active Herbal & Pure Ingredients
             </h4>
             <div className="flex flex-wrap gap-1.5">
-              {product.keyIngredients.map((item, i) => (
+              {(product.keyIngredients || ['Natural Botanical Extracts']).map((item, i) => (
                 <span
                   key={i}
                   className="text-xs text-[#234A32] bg-[#EAF2EC] px-2.5 py-1 rounded-md border border-[#D0E2D4]"
@@ -113,13 +113,13 @@ export const ProductQuickViewModal: React.FC<ProductQuickViewModalProps> = ({
               Recommended Usage
             </span>
             <p className="text-[#594B30] leading-relaxed">
-              {product.howToUse}
+              {product.howToUse || 'Apply as directed on the packaging.'}
             </p>
           </div>
 
           {/* Eco Highlights */}
           <div className="flex items-center gap-3 text-[11px] text-[#557762] pt-1">
-            {product.ecoHighlights.map((eco, i) => (
+            {(product.ecoHighlights || ['100% Herbal', 'Cruelty-Free']).map((eco, i) => (
               <span key={i} className="flex items-center gap-1">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#3D7C58]" />
                 {eco}

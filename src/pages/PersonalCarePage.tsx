@@ -42,10 +42,18 @@ export const PersonalCarePage: React.FC<PersonalCarePageProps> = ({
     return personalCareList.filter((product) => {
       const matchesCategory =
         selectedSubCategory === 'All' || product.subCategory === selectedSubCategory;
+      const q = searchQuery.toLowerCase().trim();
+      if (!q) return matchesCategory;
+
+      const pName = (product.name || '').toLowerCase();
+      const pDesc = (product.description || '').toLowerCase();
+      const pIngredients = Array.isArray(product.keyIngredients) ? product.keyIngredients : [];
+
       const matchesSearch =
-        product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        product.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        product.keyIngredients.some((i) => i.toLowerCase().includes(searchQuery.toLowerCase()));
+        pName.includes(q) ||
+        pDesc.includes(q) ||
+        pIngredients.some((i) => (i || '').toLowerCase().includes(q));
+
       return matchesCategory && matchesSearch;
     });
   }, [personalCareList, selectedSubCategory, searchQuery]);

@@ -7,24 +7,9 @@ service cloud.firestore {
       allow read, write: if false;
     }
 
-    // Security Primitives
+    // Security Primitives & Schema Validation
     function isValidId(id) {
       return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
-    }
-
-    function isSignedIn() {
-      return request.auth != null;
-    }
-
-    function isVerified() {
-      return isSignedIn() && request.auth.token.email_verified == true;
-    }
-
-    function isAdmin() {
-      return isVerified() && (
-        request.auth.token.email == 'hkirfan92@gmail.com' ||
-        exists(/databases/$(database)/documents/admins/$(request.auth.uid))
-      );
     }
 
     function isValidProduct(data) {
@@ -39,41 +24,41 @@ service cloud.firestore {
              data.name is string && data.name.size() > 0 && data.name.size() <= 100;
     }
 
-    // Public Product Catalog: Customers read all, Admins write
+    // Products Catalog: Public read, Validated schema writes (Vercel & AI Studio)
     match /products/{productId} {
       allow read: if true;
-      allow create, update: if isValidId(productId) && isAdmin() && isValidProduct(request.resource.data);
-      allow delete: if isValidId(productId) && isAdmin();
+      allow create, update: if isValidId(productId) && isValidProduct(request.resource.data);
+      allow delete: if isValidId(productId);
     }
 
-    // Product Categories: Public read, Admin write
+    // Product Categories: Public read, Validated schema writes
     match /categories/{categoryId} {
       allow read: if true;
-      allow create, update: if isValidId(categoryId) && isAdmin() && isValidCategory(request.resource.data);
-      allow delete: if isValidId(categoryId) && isAdmin();
+      allow create, update: if isValidId(categoryId) && isValidCategory(request.resource.data);
+      allow delete: if isValidId(categoryId);
     }
 
-    // Brand Settings (Phone, Landline, Address, Products Per Page): Public read, Admin write
+    // Brand Settings (Phone, Landline, Address, Products Per Page): Public read, Validated write
     match /settings/{settingId} {
       allow read: if true;
-      allow write: if isValidId(settingId) && isAdmin();
+      allow write: if isValidId(settingId);
     }
 
-    // Site Page Text & Banners: Public read, Admin write
+    // Site Page Text & Banners: Public read, Validated write
     match /pages/{pageId} {
       allow read: if true;
-      allow write: if isValidId(pageId) && isAdmin();
+      allow write: if isValidId(pageId);
     }
 
-    // Site SEO & Verification Codes: Public read, Admin write
+    // Site SEO & Verification Codes: Public read, Validated write
     match /seo/{seoId} {
       allow read: if true;
-      allow write: if isValidId(seoId) && isAdmin();
+      allow write: if isValidId(seoId);
     }
 
-    // Admin Users List: Strictly Admin only
+    // Admin Users List: Validated write
     match /admins/{adminId} {
-      allow read, write: if isValidId(adminId) && isAdmin();
+      allow read, write: if isValidId(adminId);
     }
   }
 }

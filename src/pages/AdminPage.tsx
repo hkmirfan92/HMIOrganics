@@ -122,11 +122,20 @@ export const AdminPage: React.FC<AdminPageProps> = ({
   // Filtered list for Catalog tab
   const filteredProducts = useMemo(() => {
     return products.filter((p) => {
-      const matchesSearch =
-        p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        p.subCategory.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        p.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        p.keyIngredients.some((i) => i.toLowerCase().includes(searchQuery.toLowerCase()));
+      const q = searchQuery.toLowerCase().trim();
+      let matchesSearch = true;
+      if (q) {
+        const pName = (p.name || '').toLowerCase();
+        const pSub = (p.subCategory || '').toLowerCase();
+        const pDesc = (p.description || '').toLowerCase();
+        const pIngredients = Array.isArray(p.keyIngredients) ? p.keyIngredients : [];
+
+        matchesSearch =
+          pName.includes(q) ||
+          pSub.includes(q) ||
+          pDesc.includes(q) ||
+          pIngredients.some((i) => (i || '').toLowerCase().includes(q));
+      }
 
       let matchesFilter = true;
       if (selectedFilter === 'bestsellers') matchesFilter = Boolean(p.isBestseller);
@@ -163,6 +172,18 @@ export const AdminPage: React.FC<AdminPageProps> = ({
         ? `"${product.name}" is now visible to customers in store listing`
         : `"${product.name}" is now hidden from public store listing`
     );
+  };
+
+  const handleUnhideAll = async () => {
+    try {
+      const hiddenProducts = products.filter((p) => p.isVisible === false);
+      for (const prod of hiddenProducts) {
+        await onUpdateProduct(prod.id, { isVisible: true });
+      }
+      showToast(`All ${hiddenProducts.length} hidden products are now visible in store!`);
+    } catch {
+      showToast('Could not unhide all products');
+    }
   };
 
   const handleSaveProduct = async (productData: Partial<Product>) => {
@@ -570,6 +591,18 @@ export const AdminPage: React.FC<AdminPageProps> = ({
                   <EyeOff className="w-3 h-3 text-amber-600" />
                   <span>Hidden ({hiddenCount})</span>
                 </button>
+
+                {hiddenCount > 0 && (
+                  <button
+                    type="button"
+                    onClick={handleUnhideAll}
+                    className="px-3.5 py-1.5 text-xs font-bold rounded-lg transition-all whitespace-nowrap cursor-pointer bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs flex items-center gap-1.5"
+                    title="Make all hidden products visible on the website again"
+                  >
+                    <Eye className="w-3 h-3" />
+                    <span>Unhide All ({hiddenCount})</span>
+                  </button>
+                )}
               </div>
 
               {/* Search + Reset catalog */}

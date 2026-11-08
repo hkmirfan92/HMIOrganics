@@ -104,25 +104,27 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         <div className="space-y-1.5">
           {/* Metadata line (Clean, unboxed text per Section 1.A) */}
           <div className="flex items-center gap-2 text-xs text-[#5E7A68]">
-            <span className="font-medium">{product.subCategory}</span>
+            <span className="font-medium">{product.subCategory || (isPersonalCare ? 'Personal Care' : 'Home Care')}</span>
             <span aria-hidden="true">·</span>
-            <span>{product.volumeOrWeight}</span>
+            <span>{product.volumeOrWeight || 'Standard Pack'}</span>
           </div>
 
           {/* Product Title */}
           <h3 className="font-display font-semibold text-[#163824] text-base leading-snug group-hover:text-[#255C39] transition-colors">
-            {product.name}
+            {product.name || 'HMI Herbal Care'}
           </h3>
 
           {/* Product Brief Description */}
           <p className="text-xs text-slate-600 line-clamp-2 leading-relaxed">
-            {product.description}
+            {product.description || 'Crafted with pure herbal extracts and plant-powered care.'}
           </p>
 
           {/* Key Ingredients Snippet */}
           <p className="text-[11px] text-[#486B52] line-clamp-1 pt-1 font-medium">
             <span className="text-slate-400 font-normal">Active: </span>
-            {product.keyIngredients.slice(0, 3).join(', ')}
+            {Array.isArray(product.keyIngredients) && product.keyIngredients.length > 0
+              ? product.keyIngredients.filter(Boolean).slice(0, 3).join(', ')
+              : 'Pure Botanical Extracts'}
           </p>
         </div>
 
@@ -132,7 +134,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             <div>
               <span className="text-[10px] text-slate-400 uppercase tracking-wider block">Retail Price</span>
               <span className="text-base font-bold text-[#163824] tabular-nums">
-                Rs. {product.pricePkr?.toLocaleString()}
+                Rs. {(typeof product.pricePkr === 'number' ? product.pricePkr : 500).toLocaleString()}
               </span>
             </div>
 

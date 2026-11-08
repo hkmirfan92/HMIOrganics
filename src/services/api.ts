@@ -126,6 +126,34 @@ function getAuthHeader(): Record<string, string> {
   };
 }
 
+export function normalizeProduct(p: any): Product {
+  const isPersonal = p?.category === 'home-care' ? false : true;
+  return {
+    id: String(p?.id || 'prod-' + Math.random().toString(36).slice(2, 7)),
+    name: String(p?.name || 'HMI Herbal Care'),
+    category: p?.category === 'home-care' ? 'home-care' : 'personal-care',
+    subCategory: String(p?.subCategory || (isPersonal ? 'Personal Care' : 'Home Cleaning')),
+    tagline: String(p?.tagline || ''),
+    description: String(p?.description || 'Crafted with pure herbal extracts and plant-powered care.'),
+    volumeOrWeight: String(p?.volumeOrWeight || 'Standard Pack'),
+    pricePkr: typeof p?.pricePkr === 'number' && !isNaN(p.pricePkr) ? Math.max(0, p.pricePkr) : 500,
+    keyIngredients: Array.isArray(p?.keyIngredients) && p.keyIngredients.length > 0
+      ? p.keyIngredients.filter(Boolean)
+      : ['Pure Botanical Extracts'],
+    benefits: Array.isArray(p?.benefits) && p.benefits.length > 0
+      ? p.benefits.filter(Boolean)
+      : ['Safe, pure & eco-friendly formulation'],
+    howToUse: String(p?.howToUse || 'Apply as directed on packaging.'),
+    isBestseller: Boolean(p?.isBestseller),
+    isVisible: p?.isVisible !== undefined ? Boolean(p.isVisible) : true,
+    ecoHighlights: Array.isArray(p?.ecoHighlights) && p.ecoHighlights.length > 0
+      ? p.ecoHighlights.filter(Boolean)
+      : ['Zero Toxic Fillers', 'Eco-Friendly'],
+    customEmoji: String(p?.customEmoji || (isPersonal ? '🌿' : '✨')),
+    imageUrl: String(p?.imageUrl || ''),
+  };
+}
+
 export const api = {
   // Public GET: Fetch all products from Firestore with LocalStorage cache fallback
   async getProducts(): Promise<Product[]> {
@@ -136,8 +164,8 @@ export const api = {
       if (!snapshot.empty) {
         const productsList: Product[] = [];
         snapshot.forEach((docSnap) => {
-          const data = docSnap.data() as Product;
-          productsList.push({ ...data, id: docSnap.id });
+          const raw = docSnap.data();
+          productsList.push(normalizeProduct({ ...raw, id: docSnap.id }));
         });
         localStorage.setItem(LOCAL_STORAGE_PRODUCTS_KEY, JSON.stringify(productsList));
         return productsList;
@@ -151,10 +179,15 @@ export const api = {
 
     try {
       const stored = localStorage.getItem(LOCAL_STORAGE_PRODUCTS_KEY);
-      if (stored) return JSON.parse(stored);
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return parsed.map(normalizeProduct);
+        }
+      }
     } catch {}
 
-    return ALL_PRODUCTS;
+    return ALL_PRODUCTS.map(normalizeProduct);
   },
 
   // Helper: Seed default products to Firestore

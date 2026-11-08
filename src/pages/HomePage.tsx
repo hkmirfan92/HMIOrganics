@@ -80,12 +80,18 @@ export const HomePage: React.FC<HomePageProps> = ({
       if (p.isVisible === false) return false;
       const matchesCat = activeCategory === 'all' || p.category === activeCategory;
       const q = searchQuery.trim().toLowerCase();
+      if (!q) return matchesCat;
+
+      const pName = (p.name || '').toLowerCase();
+      const pSub = (p.subCategory || '').toLowerCase();
+      const pDesc = (p.description || '').toLowerCase();
+      const pIngredients = Array.isArray(p.keyIngredients) ? p.keyIngredients : [];
+
       const matchesSearch =
-        !q ||
-        p.name.toLowerCase().includes(q) ||
-        p.subCategory.toLowerCase().includes(q) ||
-        p.description.toLowerCase().includes(q) ||
-        p.keyIngredients.some((i) => i.toLowerCase().includes(q));
+        pName.includes(q) ||
+        pSub.includes(q) ||
+        pDesc.includes(q) ||
+        pIngredients.some((i) => (i || '').toLowerCase().includes(q));
 
       return matchesCat && matchesSearch;
     });
@@ -355,9 +361,15 @@ export const HomePage: React.FC<HomePageProps> = ({
         ) : (
           <div className="py-16 text-center bg-white rounded-3xl border border-[#DFE7E1] space-y-3 p-8">
             <PackageOpen className="w-12 h-12 text-[#99B6A1] mx-auto" />
-            <h3 className="font-bold text-base text-[#143721]">No Products Found</h3>
+            <h3 className="font-bold text-base text-[#143721]">
+              {products.length > 0 && products.every((p) => p.isVisible === false)
+                ? 'Store Products Currently Hidden'
+                : 'No Products Found'}
+            </h3>
             <p className="text-xs text-slate-500 max-w-sm mx-auto">
-              Selected category ya search query ke mutabiq koi product available nahi hai. Filter reset karke dobara check karein.
+              {products.length > 0 && products.every((p) => p.isVisible === false)
+                ? 'Products ko admin panel se hide kiya gaya hai. Store Admin Portal me ja kar products ko "Visible" karein.'
+                : 'Selected category ya search query ke mutabiq koi product available nahi hai. Filter reset karke dobara check karein.'}
             </p>
             <button
               onClick={() => {
